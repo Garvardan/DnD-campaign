@@ -1,0 +1,24 @@
+{
+	"nodes":[
+		{"id":"e7c910b39815c8fa","type":"file","file":"Жизненная энергия.md","x":-217,"y":140,"width":324,"height":520},
+		{"id":"33d5f71a705d8773","type":"text","text":"Жизненная энергия питает тело, которое вмещает в себе душу, которая в свою очередь хранит в себе разум, который управляет телом.","x":-180,"y":-360,"width":250,"height":170},
+		{"id":"067058902d7f391f","type":"text","text":"Душа","x":120,"y":-420,"width":250,"height":60,"color":"5"},
+		{"id":"81e341b85714a785","type":"text","text":"Разум","x":-480,"y":-420,"width":250,"height":60,"color":"#ffea00"},
+		{"id":"cb893c6c056c65fa","type":"text","text":"Тело","x":-180,"y":-120,"width":250,"height":60,"color":"1"},
+		{"id":"c4c6860c25db1910","type":"file","file":"Сила воли.md","x":-255,"y":-1020,"width":400,"height":400},
+		{"id":"115b9b760d06fe90","type":"file","file":"Серая энергия.md","x":400,"y":-123,"width":400,"height":303},
+		{"id":"2a64eeef026a2120","type":"file","file":"Самоконтроль.md","x":-840,"y":-123,"width":400,"height":283}
+	],
+	"edges":[
+		{"id":"45057cc678f7ab85","fromNode":"cb893c6c056c65fa","fromSide":"right","toNode":"067058902d7f391f","toSide":"bottom","label":"Служит вместилищем"},
+		{"id":"5f0d685bc50ad47c","fromNode":"81e341b85714a785","fromSide":"bottom","toNode":"cb893c6c056c65fa","toSide":"left","label":"Управляет"},
+		{"id":"4b22c4486c6ec127","fromNode":"067058902d7f391f","fromSide":"top","toNode":"81e341b85714a785","toSide":"top","label":"Хранит в себе"},
+		{"id":"b34de53d266a2a40","fromNode":"e7c910b39815c8fa","fromSide":"top","toNode":"cb893c6c056c65fa","toSide":"bottom"},
+		{"id":"59f2f83274d0dad2","fromNode":"c4c6860c25db1910","fromSide":"left","toNode":"81e341b85714a785","toSide":"left"},
+		{"id":"ea8f154ec7c4bf0b","fromNode":"c4c6860c25db1910","fromSide":"right","toNode":"067058902d7f391f","toSide":"right"},
+		{"id":"e0f4a0b1003497bf","fromNode":"115b9b760d06fe90","fromSide":"left","toNode":"cb893c6c056c65fa","toSide":"bottom"},
+		{"id":"b3e5c3cfc8a4af4b","fromNode":"115b9b760d06fe90","fromSide":"top","toNode":"067058902d7f391f","toSide":"right"},
+		{"id":"364c58e9f869f39a","fromNode":"2a64eeef026a2120","fromSide":"top","toNode":"81e341b85714a785","toSide":"left"},
+		{"id":"4e6494a3a0a04502","fromNode":"2a64eeef026a2120","fromSide":"right","toNode":"cb893c6c056c65fa","toSide":"bottom"}
+	]
+}
