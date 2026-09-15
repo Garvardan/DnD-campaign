@@ -11,10 +11,14 @@
             "id": "ccf4d38188ab460b",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Граф"
+              "type": "markdown",
+              "state": {
+                "file": "Греческие мифы.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Греческие мифы"
             }
           }
         ]
@@ -169,6 +173,7 @@
   },
   "left-ribbon": {
     "hiddenItems": {
+      "obsidian-git:Open Git source control": false,
       "graph:Граф": false,
       "switcher:Меню быстрого перехода": false,
       "canvas:Создать новый холст": false,
@@ -178,11 +183,11 @@
       "bases:Создать новую базу": false
     }
   },
-  "active": "ccf4d38188ab460b",
+  "active": "62a65f7899e1c1a2",
   "lastOpenFiles": [
-    "Измерения.md",
-    "Устройство мира.md",
     "Структура жизни.canvas",
+    "Устройство мира.md",
+    "Измерения.md",
     "Кампейн/Появление.md",
     "[[Магия]].md",
     "Магия.md",
