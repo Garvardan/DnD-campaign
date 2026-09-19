@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Правила создания персонажа.md",
+                "file": "Homebrew правила.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Правила создания персонажа"
+              "title": "Homebrew правила"
             }
           }
         ]
@@ -195,8 +195,8 @@
   },
   "active": "ccf4d38188ab460b",
   "lastOpenFiles": [
-    "Homebrew правила.md",
     "Правила создания персонажа.md",
+    "Homebrew правила.md",
     "Магия.md",
     "Мэрлин Амброзиус.md",
     "Pasted image 20260917012848.png",
