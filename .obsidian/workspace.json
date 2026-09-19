@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Шеол.md",
+                "file": "Геенна.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Шеол"
+              "title": "Геенна"
             }
           }
         ]
@@ -195,7 +195,9 @@
   },
   "active": "ccf4d38188ab460b",
   "lastOpenFiles": [
+    "Геенна.md",
     "Шеол.md",
+    "Pasted image 20260920012636.png",
     "Преисподняя.md",
     "Христианство.md",
     "Homebrew правила.md",
@@ -225,7 +227,6 @@
     "Жизненная энергия.md",
     "Японские мифы.md",
     "Месопотамские мифы.md",
-    "Кампейн",
-    "Вітаємо.md"
+    "Кампейн"
   ]
 }
