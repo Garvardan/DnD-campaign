@@ -11,10 +11,14 @@
             "id": "ccf4d38188ab460b",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Граф"
+              "type": "markdown",
+              "state": {
+                "file": "Правила создания персонажа.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Правила создания персонажа"
             }
           }
         ]
@@ -191,6 +195,7 @@
   },
   "active": "ccf4d38188ab460b",
   "lastOpenFiles": [
+    "Homebrew правила.md",
     "Геенна.md",
     "Pasted image 20260920021028.png",
     "Pasted image 20260920020719.png",
@@ -201,7 +206,6 @@
     "Pasted image 20260920012636.png",
     "Преисподняя.md",
     "Христианство.md",
-    "Homebrew правила.md",
     "Правила создания персонажа.md",
     "Магия.md",
     "Мэрлин Амброзиус.md",
