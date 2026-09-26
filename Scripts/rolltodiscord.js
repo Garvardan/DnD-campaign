@@ -71,7 +71,7 @@ await requestUrl({
     method: "POST",
     contentType: "application/json",
     body: JSON.stringify({
-        content: `**${rollName}**\n🎲 ${details} = **${result}**`
+        content: `**${rollName}**\n\n🎲 ${details} = **${result}**`
     })
 });
 
