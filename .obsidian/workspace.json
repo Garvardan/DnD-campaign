@@ -11,10 +11,14 @@
             "id": "ccf4d38188ab460b",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Граф"
+              "type": "markdown",
+              "state": {
+                "file": "Персонажи/тестовый персонаж.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "тестовый персонаж"
             }
           }
         ]
@@ -169,6 +173,16 @@
               "icon": "git-pull-request",
               "title": "Source Control"
             }
+          },
+          {
+            "id": "33b37e66665cd05e",
+            "type": "leaf",
+            "state": {
+              "type": "DICE_ROLLER_VIEW",
+              "state": {},
+              "icon": "dices",
+              "title": "Dice Tray"
+            }
           }
         ],
         "currentTab": 5
@@ -191,6 +205,8 @@
   },
   "active": "ccf4d38188ab460b",
   "lastOpenFiles": [
+    "Персонажи/тестовый персонаж.md",
+    "Персонажи",
     "Истинный Лонгин.md",
     "Геенна.md",
     "Структура жизни.canvas",
@@ -209,7 +225,7 @@
     "Преисподняя.md",
     "Христианство.md",
     "Магия.md",
-    "Мэрлин Амброзиус.md",
+    "Персонажи/Мэрлин Амброзиус.md",
     "Лонгины.md",
     "Религии.md",
     "Абсолютная погибель.md",
