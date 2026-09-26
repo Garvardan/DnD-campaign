@@ -45,12 +45,19 @@ const frontmatter =
 // ================================
 
 const privateRoll =
-    frontmatter.private_roll ?? false;
+    frontmatter.private_roll === true ||
+    frontmatter.private_roll === "true";
 
 const WEBHOOK_URL =
     privateRoll
         ? WEBHOOK_PRIVATE
         : WEBHOOK_PUBLIC;
+
+new Notice(
+    privateRoll
+        ? "🔒 Бросок в личный канал"
+        : "🌐 Бросок в общий канал"
+);
 
 // ================================
 // ПОДСТАНОВКА [СВОЙСТВ]
