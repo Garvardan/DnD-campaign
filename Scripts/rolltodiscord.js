@@ -262,11 +262,225 @@ body.set(
 
 
 // ================================
+// DISCORD
+// ================================
+
+const characterName =
+    frontmatter.character_name ?? file.basename;
+
+const portraitValue =
+    frontmatter.portrait ?? null;
+
+
+// ================================
+// ПОИСК ПОРТРЕТА
+// ================================
+
+function getPortraitFile(value) {
+
+    if (!value || typeof value !== "string") {
+        return null;
+    }
+
+    let path = value.trim();
+
+    // Поддержка:
+    // Портреты/Зеновия.jpg
+    // [[Портреты/Зеновия.jpg]]
+    // ![[Портреты/Зеновия.jpg]]
+    path = path
+        .replace(/^!\[\[/, "")
+        .replace(/^\[\[/, "")
+        .replace(/\]\]$/, "");
+
+    // Если есть alias:
+    // [[Портреты/Зеновия.jpg|Зеновия]]
+    path = path.split("|")[0].trim();
+
+
+    // Точный путь
+    const exactFile =
+        app.vault.getAbstractFileByPath(path);
+
+    if (exactFile instanceof obsidian.TFile) {
+        return exactFile;
+    }
+
+
+    // Obsidian-ссылка
+    const linkedFile =
+        app.metadataCache.getFirstLinkpathDest(
+            path,
+            file.path
+        );
+
+    if (linkedFile instanceof obsidian.TFile) {
+        return linkedFile;
+    }
+
+    return null;
+}
+
+
+const portraitFile =
+    getPortraitFile(portraitValue);
+
+
+// ================================
+// EMBED
+// ================================
+
+const embed = {
+
+    title: characterName,
+
+    description:
+        `**${rollName}**\n` +
+        `🎲 ${details} = **${result}**`
+};
+
+
+// ================================
+// ЕСЛИ ПОРТРЕТА НЕТ
+// ================================
+
+if (!portraitFile) {
+
+    await requestUrl({
+        url: WEBHOOK_URL,
+        method: "POST",
+        contentType: "application/json",
+
+        body: JSON.stringify({
+            embeds: [embed]
+        })
+    });
+
+    new Notice(`🎲 ${rollName}: ${result}`);
+    return;
+}
+
+
+// ================================
+// ПОДГОТОВКА ПОРТРЕТА
+// ================================
+
+const extension =
+    portraitFile.extension.toLowerCase();
+
+
+const mimeTypes = {
+    png: "image/png",
+    jpg: "image/jpeg",
+    jpeg: "image/jpeg",
+    webp: "image/webp",
+    gif: "image/gif"
+};
+
+
+const mimeType =
+    mimeTypes[extension] ?? "application/octet-stream";
+
+
+const discordFileName =
+    `portrait.${extension}`;
+
+
+// Читаем локальную картинку
+const portraitBuffer =
+    await app.vault.readBinary(portraitFile);
+
+
+// Используем картинку именно как thumbnail
+embed.thumbnail = {
+    url: `attachment://${discordFileName}`
+};
+
+
+// ================================
+// DISCORD PAYLOAD
+// ================================
+
+const payload = {
+
+    embeds: [embed],
+
+    attachments: [
+        {
+            id: 0,
+            filename: discordFileName
+        }
+    ]
+};
+
+
+// ================================
+// MULTIPART
+// ================================
+
+const boundary =
+    `----ObsidianDiscord${Date.now()}`;
+
+const encoder =
+    new TextEncoder();
+
+
+const start = encoder.encode(
+
+    `--${boundary}\r\n` +
+
+    `Content-Disposition: form-data; name="payload_json"\r\n` +
+    `Content-Type: application/json\r\n\r\n` +
+
+    `${JSON.stringify(payload)}\r\n` +
+
+    `--${boundary}\r\n` +
+
+    `Content-Disposition: form-data; name="files[0]"; filename="${discordFileName}"\r\n` +
+    `Content-Type: ${mimeType}\r\n\r\n`
+);
+
+
+const image =
+    new Uint8Array(portraitBuffer);
+
+
+const end = encoder.encode(
+    `\r\n--${boundary}--\r\n`
+);
+
+
+const body = new Uint8Array(
+    start.length +
+    image.length +
+    end.length
+);
+
+
+body.set(
+    start,
+    0
+);
+
+body.set(
+    image,
+    start.length
+);
+
+body.set(
+    end,
+    start.length + image.length
+);
+
+
+// ================================
 // ОТПРАВКА
 // ================================
 
 await requestUrl({
+
     url: WEBHOOK_URL,
+
     method: "POST",
 
     headers: {
@@ -277,5 +491,7 @@ await requestUrl({
     body: body.buffer
 });
 
+
+new Notice(`🎲 ${rollName}: ${result}`);
 
 new Notice(`🎲 ${rollName}: ${result}`);
