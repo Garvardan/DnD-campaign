@@ -6,15 +6,19 @@ const { requestUrl, Notice, TFile } = obsidian;
 
 const WEBHOOK_URL = "https://discord.com/api/webhooks/1553383742683226124/Jkje5QoP4U-ebzfBzU9UWJdsZ3pQ8ZBTAaRbsSS7fP93XbH-BMEydKFcuRR_HJcqHxTv";
 
-const formula = context.args?.formula ?? "1d20";
-const rollName = context.args?.name ?? "Бросок";
+const formula =
+    context.args?.formula ?? "1d20";
+
+const rollName =
+    context.args?.name ?? "Бросок";
 
 
 // ================================
 // ДАННЫЕ ПЕРСОНАЖА
 // ================================
 
-const file = app.workspace.getActiveFile();
+const file =
+    app.workspace.getActiveFile();
 
 if (!file) {
     new Notice("Активный файл не найден.");
@@ -22,9 +26,16 @@ if (!file) {
 }
 
 const frontmatter =
-    app.metadataCache.getFileCache(file)?.frontmatter ?? {};
+    app.metadataCache
+        .getFileCache(file)
+        ?.frontmatter ?? {};
 
-const portraitValue = frontmatter.portrait ?? null;
+
+const characterName =
+    frontmatter.character_name ?? file.basename;
+
+const portraitValue =
+    frontmatter.portrait ?? null;
 
 
 // ================================
@@ -36,11 +47,13 @@ if (!window.DiceRoller) {
     return;
 }
 
+
 const { result, roller } =
     await window.DiceRoller.parseDice(
         formula,
         file.path
     );
+
 
 if (
     result === undefined ||
@@ -56,10 +69,16 @@ if (
 // КРАСИВЫЙ РЕЗУЛЬТАТ
 // ================================
 
-const diceResult = roller.children[0].result;
-const bonus = result - diceResult;
+const diceResult =
+    roller.children[0].result;
 
-let details = `${roller.children[0].display}`;
+const bonus =
+    result - diceResult;
+
+
+let details =
+    `${roller.children[0].display}`;
+
 
 if (bonus > 0) {
     details += ` + ${bonus}`;
@@ -70,253 +89,65 @@ else if (bonus < 0) {
 
 
 // ================================
-// ПОИСК ПОРТРЕТА В VAULT
+// ПОИСК ПОРТРЕТА
 // ================================
 
 function getPortraitFile(value) {
 
-    if (!value || typeof value !== "string") {
+    if (
+        !value ||
+        typeof value !== "string"
+    ) {
         return null;
     }
 
+
+    let path =
+        value.trim();
+
+
     // Поддерживает:
+    //
     // Портреты/Зеновия.jpg
     // [[Портреты/Зеновия.jpg]]
     // ![[Портреты/Зеновия.jpg]]
-    let path = value.trim();
 
     path = path
         .replace(/^!\[\[/, "")
         .replace(/^\[\[/, "")
         .replace(/\]\]$/, "");
 
-    // Если есть alias:
-    // [[Зеновия.jpg|Зеновия]]
-    path = path.split("|")[0].trim();
+
+    // [[Портреты/Зеновия.jpg|Зеновия]]
+
+    path =
+        path.split("|")[0].trim();
 
 
-    // Сначала пробуем точный путь
+    // Сначала точный путь
+
     const exactFile =
         app.vault.getAbstractFileByPath(path);
+
 
     if (exactFile instanceof TFile) {
         return exactFile;
     }
 
 
-    // Затем пытаемся разрешить как Obsidian-ссылку
+    // Потом Obsidian-ссылка
+
     const linkedFile =
         app.metadataCache.getFirstLinkpathDest(
             path,
             file.path
         );
+
 
     if (linkedFile instanceof TFile) {
         return linkedFile;
     }
 
-    return null;
-}
-
-
-const portraitFile =
-    getPortraitFile(portraitValue);
-
-
-// ================================
-// EMBED
-// ================================
-
-const embed = {
-    title: rollName,
-    description: `🎲 ${details} = **${result}**`
-};
-
-
-// ================================
-// БЕЗ ПОРТРЕТА
-// ================================
-
-if (!portraitFile) {
-
-    await requestUrl({
-        url: WEBHOOK_URL,
-        method: "POST",
-        contentType: "application/json",
-
-        body: JSON.stringify({
-            embeds: [embed]
-        })
-    });
-
-    new Notice(`🎲 ${rollName}: ${result}`);
-    return;
-}
-
-
-// ================================
-// ПОРТРЕТ
-// ================================
-
-const extension =
-    portraitFile.extension.toLowerCase();
-
-const mimeTypes = {
-    png: "image/png",
-    jpg: "image/jpeg",
-    jpeg: "image/jpeg",
-    webp: "image/webp",
-    gif: "image/gif"
-};
-
-const mimeType =
-    mimeTypes[extension] ?? "application/octet-stream";
-
-
-// Discord получит простое имя файла,
-// независимо от настоящего имени изображения
-const discordFileName =
-    `portrait.${extension}`;
-
-
-// Читаем картинку из vault
-const portraitBuffer =
-    await app.vault.readBinary(portraitFile);
-
-
-// Thumbnail использует прикреплённый файл
-embed.thumbnail = {
-    url: `attachment://${discordFileName}`
-};
-
-
-// ================================
-// DISCORD PAYLOAD
-// ================================
-
-const payload = {
-    embeds: [embed],
-
-    attachments: [
-        {
-            id: 0,
-            filename: discordFileName
-        }
-    ]
-};
-
-
-// ================================
-// MULTIPART
-// ================================
-
-const boundary =
-    `----ObsidianDiscord${Date.now()}`;
-
-const encoder = new TextEncoder();
-
-
-const start = encoder.encode(
-
-    `--${boundary}\r\n` +
-
-    `Content-Disposition: form-data; name="payload_json"\r\n` +
-    `Content-Type: application/json\r\n\r\n` +
-
-    `${JSON.stringify(payload)}\r\n` +
-
-    `--${boundary}\r\n` +
-
-    `Content-Disposition: form-data; name="files[0]"; filename="${discordFileName}"\r\n` +
-    `Content-Type: ${mimeType}\r\n\r\n`
-);
-
-
-const image =
-    new Uint8Array(portraitBuffer);
-
-
-const end = encoder.encode(
-    `\r\n--${boundary}--\r\n`
-);
-
-
-const body = new Uint8Array(
-    start.length +
-    image.length +
-    end.length
-);
-
-
-body.set(start, 0);
-
-body.set(
-    image,
-    start.length
-);
-
-body.set(
-    end,
-    start.length + image.length
-);
-
-
-// ================================
-// DISCORD
-// ================================
-
-const characterName =
-    frontmatter.character_name ?? file.basename;
-
-const portraitValue =
-    frontmatter.portrait ?? null;
-
-
-// ================================
-// ПОИСК ПОРТРЕТА
-// ================================
-
-function getPortraitFile(value) {
-
-    if (!value || typeof value !== "string") {
-        return null;
-    }
-
-    let path = value.trim();
-
-    // Поддержка:
-    // Портреты/Зеновия.jpg
-    // [[Портреты/Зеновия.jpg]]
-    // ![[Портреты/Зеновия.jpg]]
-    path = path
-        .replace(/^!\[\[/, "")
-        .replace(/^\[\[/, "")
-        .replace(/\]\]$/, "");
-
-    // Если есть alias:
-    // [[Портреты/Зеновия.jpg|Зеновия]]
-    path = path.split("|")[0].trim();
-
-
-    // Точный путь
-    const exactFile =
-        app.vault.getAbstractFileByPath(path);
-
-    if (exactFile instanceof obsidian.TFile) {
-        return exactFile;
-    }
-
-
-    // Obsidian-ссылка
-    const linkedFile =
-        app.metadataCache.getFirstLinkpathDest(
-            path,
-            file.path
-        );
-
-    if (linkedFile instanceof obsidian.TFile) {
-        return linkedFile;
-    }
 
     return null;
 }
@@ -335,8 +166,8 @@ const embed = {
     title: characterName,
 
     description:
-        `**${rollName}**\n` +
-        `🎲 ${details} = **${result}**`
+        `**${rollName}**\n\n` +
+        `${details} = **${result}**`
 };
 
 
@@ -347,16 +178,24 @@ const embed = {
 if (!portraitFile) {
 
     await requestUrl({
+
         url: WEBHOOK_URL,
+
         method: "POST",
-        contentType: "application/json",
+
+        contentType:
+            "application/json",
 
         body: JSON.stringify({
             embeds: [embed]
         })
     });
 
-    new Notice(`🎲 ${rollName}: ${result}`);
+
+    new Notice(
+        `🎲 ${rollName}: ${result}`
+    );
+
     return;
 }
 
@@ -370,35 +209,46 @@ const extension =
 
 
 const mimeTypes = {
+
     png: "image/png",
+
     jpg: "image/jpeg",
+
     jpeg: "image/jpeg",
+
     webp: "image/webp",
+
     gif: "image/gif"
 };
 
 
 const mimeType =
-    mimeTypes[extension] ?? "application/octet-stream";
+    mimeTypes[extension]
+    ?? "application/octet-stream";
 
 
 const discordFileName =
     `portrait.${extension}`;
 
 
-// Читаем локальную картинку
+// Читаем картинку из vault
+
 const portraitBuffer =
-    await app.vault.readBinary(portraitFile);
+    await app.vault.readBinary(
+        portraitFile
+    );
 
 
-// Используем картинку именно как thumbnail
+// Discord thumbnail
+
 embed.thumbnail = {
-    url: `attachment://${discordFileName}`
+    url:
+        `attachment://${discordFileName}`
 };
 
 
 // ================================
-// DISCORD PAYLOAD
+// PAYLOAD
 // ================================
 
 const payload = {
@@ -421,40 +271,51 @@ const payload = {
 const boundary =
     `----ObsidianDiscord${Date.now()}`;
 
+
 const encoder =
     new TextEncoder();
 
 
-const start = encoder.encode(
+const start =
+    encoder.encode(
 
-    `--${boundary}\r\n` +
+        `--${boundary}\r\n` +
 
-    `Content-Disposition: form-data; name="payload_json"\r\n` +
-    `Content-Type: application/json\r\n\r\n` +
+        `Content-Disposition: form-data; name="payload_json"\r\n` +
 
-    `${JSON.stringify(payload)}\r\n` +
+        `Content-Type: application/json\r\n\r\n` +
 
-    `--${boundary}\r\n` +
+        `${JSON.stringify(payload)}\r\n` +
 
-    `Content-Disposition: form-data; name="files[0]"; filename="${discordFileName}"\r\n` +
-    `Content-Type: ${mimeType}\r\n\r\n`
-);
+        `--${boundary}\r\n` +
+
+        `Content-Disposition: form-data; name="files[0]"; filename="${discordFileName}"\r\n` +
+
+        `Content-Type: ${mimeType}\r\n\r\n`
+    );
 
 
 const image =
-    new Uint8Array(portraitBuffer);
+    new Uint8Array(
+        portraitBuffer
+    );
 
 
-const end = encoder.encode(
-    `\r\n--${boundary}--\r\n`
-);
+const end =
+    encoder.encode(
+        `\r\n--${boundary}--\r\n`
+    );
 
 
-const body = new Uint8Array(
-    start.length +
-    image.length +
-    end.length
-);
+const body =
+    new Uint8Array(
+
+        start.length +
+
+        image.length +
+
+        end.length
+    );
 
 
 body.set(
@@ -462,10 +323,12 @@ body.set(
     0
 );
 
+
 body.set(
     image,
     start.length
 );
+
 
 body.set(
     end,
@@ -484,11 +347,16 @@ await requestUrl({
     method: "POST",
 
     headers: {
+
         "Content-Type":
             `multipart/form-data; boundary=${boundary}`
     },
 
-    body: body.buffer
+    body:
+        body.buffer
 });
 
-new Notice(`🎲 ${rollName}: ${result}`);
+
+new Notice(
+    `🎲 ${rollName}: ${result}`
+);
