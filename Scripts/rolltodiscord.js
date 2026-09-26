@@ -4,7 +4,7 @@ const { requestUrl, Notice, TFile } = obsidian;
 // НАСТРОЙКИ
 // ================================
 
-const WEBHOOK_URL = "ТВОЙ_WEBHOOK";
+const WEBHOOK_URL = "https://discord.com/api/webhooks/1553383742683226124/Jkje5QoP4U-ebzfBzU9UWJdsZ3pQ8ZBTAaRbsSS7fP93XbH-BMEydKFcuRR_HJcqHxTv";
 
 const formula = context.args?.formula ?? "1d20";
 const rollName = context.args?.name ?? "Бросок";
