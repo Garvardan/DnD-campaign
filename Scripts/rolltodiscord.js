@@ -27,6 +27,8 @@ const { result, roller } = await window.DiceRoller.parseDice(
     file?.path ?? ""
 );
 
+const details = roller.getDisplayText();
+
 if (result === undefined || result === null) {
     new Notice("Не удалось выполнить бросок.");
     return;
@@ -42,7 +44,7 @@ await requestUrl({
     method: "POST",
     contentType: "application/json",
     body: JSON.stringify({
-        content: `🎲 **${formula}** → **${result}**`
+        content: `🎲 ${details} = **${result}**`
     })
 });
 
