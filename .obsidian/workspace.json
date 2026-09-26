@@ -11,14 +11,10 @@
             "id": "ccf4d38188ab460b",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Истинный Лонгин.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Истинный Лонгин"
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Граф"
             }
           }
         ]
@@ -195,11 +191,11 @@
   },
   "active": "ccf4d38188ab460b",
   "lastOpenFiles": [
+    "Истинный Лонгин.md",
     "Геенна.md",
     "Структура жизни.canvas",
     "Священные механизмы.md",
     "Устройство мира.md",
-    "Истинный Лонгин.md",
     "Правила создания персонажа.md",
     "Homebrew правила.md",
     "Pasted image 20260922144007.png",
