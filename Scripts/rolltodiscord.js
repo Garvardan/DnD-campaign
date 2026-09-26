@@ -491,7 +491,4 @@ await requestUrl({
     body: body.buffer
 });
 
-
-new Notice(`🎲 ${rollName}: ${result}`);
-
 new Notice(`🎲 ${rollName}: ${result}`);
