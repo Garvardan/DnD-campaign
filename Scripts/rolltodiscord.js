@@ -27,9 +27,16 @@ const { result, roller } = await window.DiceRoller.parseDice(
     file?.path ?? ""
 );
 
-const details = combineModifiers(
-    roller.getDisplayText()
-);
+const diceResult = roller.children[0].result;
+const bonus = result - diceResult;
+
+let details = `${roller.children[0].display}`;
+
+if (bonus > 0) {
+    details += ` + ${bonus}`;
+} else if (bonus < 0) {
+    details += ` - ${Math.abs(bonus)}`;
+}
 
 if (result === undefined || result === null) {
     new Notice("Не удалось выполнить бросок.");
