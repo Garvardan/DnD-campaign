@@ -6,7 +6,11 @@ const { requestUrl, Notice, TFile } = obsidian;
 
 const WEBHOOK_URL = "https://discord.com/api/webhooks/1553383742683226124/Jkje5QoP4U-ebzfBzU9UWJdsZ3pQ8ZBTAaRbsSS7fP93XbH-BMEydKFcuRR_HJcqHxTv";
 
-const formula =
+// ================================
+// ФОРМУЛА
+// ================================
+
+const rawFormula =
     context.args?.formula ?? "1d20";
 
 const rollName =
@@ -31,12 +35,52 @@ const frontmatter =
         ?.frontmatter ?? {};
 
 
+// ================================
+// ПОДСТАНОВКА [СВОЙСТВ]
+// ================================
+
+// Например:
+//
+// 2d[proficiency]
+//
+// при proficiency: 6
+//
+// станет:
+//
+// 2d6
+
+const formula =
+    rawFormula.replace(
+        /\[([A-Za-z_][A-Za-z0-9_]*)\]/g,
+        (_, property) => {
+
+            const value =
+                frontmatter[property];
+
+            if (
+                value === undefined ||
+                value === null ||
+                isNaN(Number(value))
+            ) {
+                throw new Error(
+                    `Не найдено числовое свойство: ${property}`
+                );
+            }
+
+            return String(value);
+        }
+    );
+
+
+// ================================
+// ДАННЫЕ ПЕРСОНАЖА
+// ================================
+
 const characterName =
     frontmatter.character_name ?? file.basename;
 
 const portraitValue =
     frontmatter.portrait ?? null;
-
 
 // ================================
 // БРОСОК
