@@ -1,5 +1,6 @@
 [
   "obsidian-git",
   "obsidian-dice-roller",
-  "obsidian-meta-bind-plugin"
+  "obsidian-meta-bind-plugin",
+  "js-engine"
 ]
