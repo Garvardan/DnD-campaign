@@ -27,13 +27,32 @@ const { result, roller } = await window.DiceRoller.parseDice(
     file?.path ?? ""
 );
 
-const details = roller.getDisplayText();
+const details = combineModifiers(
+    roller.getDisplayText()
+);
 
 if (result === undefined || result === null) {
     new Notice("Не удалось выполнить бросок.");
     return;
 }
 
+function combineModifiers(text) {
+    return text.replace(
+        /((?:\s*[+-]\s*\d+){2,})/g,
+        (part) => {
+            const numbers = [...part.matchAll(/([+-])\s*(\d+)/g)];
+
+            const total = numbers.reduce((sum, match) => {
+                const value = Number(match[2]);
+                return match[1] === "-" ? sum - value : sum + value;
+            }, 0);
+
+            if (total > 0) return ` + ${total}`;
+            if (total < 0) return ` - ${Math.abs(total)}`;
+            return "";
+        }
+    );
+}
 
 // ================================
 // DISCORD
