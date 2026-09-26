@@ -3,8 +3,15 @@ const { requestUrl, Notice, TFile } = obsidian;
 // ================================
 // НАСТРОЙКИ
 // ================================
+// ================================
+// WEBHOOKS
+// ================================
 
-const WEBHOOK_URL = "https://discord.com/api/webhooks/1553383742683226124/Jkje5QoP4U-ebzfBzU9UWJdsZ3pQ8ZBTAaRbsSS7fP93XbH-BMEydKFcuRR_HJcqHxTv";
+const WEBHOOK_PUBLIC =
+    "https://discord.com/api/webhooks/1550124206769836034/AB7QcM3sSUiU6wgGPAyhuF9m6dIFGqjgVY-6MsxIRbQnF6km4QXXb-alFUQCXHC_2PCw";
+
+const WEBHOOK_PRIVATE =
+    "https://discord.com/api/webhooks/1553383742683226124/Jkje5QoP4U-ebzfBzU9UWJdsZ3pQ8ZBTAaRbsSS7fP93XbH-BMEydKFcuRR_HJcqHxTv";
 
 // ================================
 // ФОРМУЛА
@@ -33,7 +40,17 @@ const frontmatter =
     app.metadataCache
         .getFileCache(file)
         ?.frontmatter ?? {};
+// ================================
+// ВЫБОР КАНАЛА
+// ================================
 
+const privateRoll =
+    frontmatter.private_roll ?? false;
+
+const WEBHOOK_URL =
+    privateRoll
+        ? WEBHOOK_PRIVATE
+        : WEBHOOK_PUBLIC;
 
 // ================================
 // ПОДСТАНОВКА [СВОЙСТВ]
