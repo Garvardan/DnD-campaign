@@ -29,6 +29,7 @@ const { result, roller } = await window.DiceRoller.parseDice(
 
 const diceResult = roller.children[0].result;
 const bonus = result - diceResult;
+const rollName = context.args?.name ?? "Бросок";
 
 let details = `${roller.children[0].display}`;
 
@@ -70,7 +71,7 @@ await requestUrl({
     method: "POST",
     contentType: "application/json",
     body: JSON.stringify({
-        content: `🎲 ${details} = **${result}**`
+        content: `**${rollName}**\n🎲 ${details} = **${result}**`
     })
 });
 
