@@ -1,4 +1,4 @@
 .markdown-preview-view.character-sheet .markdown-preview-sizer,
 .markdown-source-view.character-sheet .cm-sizer {
-    border: 3px solid red !important;
+    max-width: 1200px;
 }
