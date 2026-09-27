@@ -9,3 +9,32 @@
 .character-sheet h3 {
     break-inside: avoid;
 }
+
+.character-sheet .meta-bind-button {
+    display: inline-flex !important;
+    width: fit-content !important;
+    max-width: max-content !important;
+}
+.character-sheet .block-language-meta-bind-button {
+    display: inline-block;
+    margin-right: 6px;
+    margin-bottom: 6px;
+}
+/* Контейнер Meta Bind кнопки в Live Preview */
+.character-sheet .cm-embed-block:has(.block-language-meta-bind-button) {
+    display: inline-block !important;
+    width: fit-content !important;
+    max-width: max-content !important;
+
+    margin-right: 6px;
+    margin-bottom: 6px;
+
+    vertical-align: top;
+}
+
+/* Сама кнопка */
+.character-sheet .block-language-meta-bind-button,
+.character-sheet .meta-bind-button {
+    width: fit-content !important;
+    max-width: max-content !important;
+}
