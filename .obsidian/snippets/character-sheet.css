@@ -1,6 +1,5 @@
 .markdown-preview-view.character-sheet .markdown-preview-sizer {
-    column-count: 2;
-    column-gap: 32px;
+    width:1600 px;
 }
 
 .character-sheet p,
