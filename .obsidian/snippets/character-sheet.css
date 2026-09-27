@@ -1,3 +1,4 @@
-.character-sheet {
-    border: 2px solid red;
+.markdown-preview-view.character-sheet .markdown-preview-sizer,
+.markdown-source-view.character-sheet .cm-sizer {
+    border: 3px solid red !important;
 }
