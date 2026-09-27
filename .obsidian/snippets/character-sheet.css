@@ -1,4 +1,13 @@
 .markdown-preview-view.character-sheet .markdown-preview-sizer,
-.markdown-source-view.character-sheet .cm-sizer {
-    max-width: 1200px;
+.markdown-source-view.character-sheet .cm-content {
+    column-count: 2;
+    column-gap: 32px;
+}
+
+.character-sheet p,
+.character-sheet .block-language-meta-bind-button,
+.character-sheet .meta-bind-button,
+.character-sheet h2,
+.character-sheet h3 {
+    break-inside: avoid;
 }
