@@ -38,3 +38,18 @@
     width: fit-content !important;
     max-width: max-content !important;
 }
+
+.character-sheet .cm-preview-code-block:has(> .block-language-meta-bind-button) {
+    display: inline-block !important;
+    width: fit-content !important;
+    max-width: max-content !important;
+
+    margin-right: 6px !important;
+    margin-bottom: 6px !important;
+
+    vertical-align: top;
+}
+
+.character-sheet .cm-preview-code-block:has(> .block-language-meta-bind-button) .edit-block-button {
+    display: none !important;
+}
