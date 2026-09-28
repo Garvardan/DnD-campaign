@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Scripts/Без названия.md",
+                "file": "Scripts/Панель мастера.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Без названия"
+              "title": "Панель мастера"
             }
           }
         ]
@@ -156,7 +156,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Scripts/Без названия.md",
+                "file": "Scripts/Панель мастера.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -204,13 +204,14 @@
       "bases:Создать новую базу": false
     }
   },
-  "active": "881b29ec8732b138",
+  "active": "ccf4d38188ab460b",
   "lastOpenFiles": [
-    "Персонажи/Зеновия.md",
-    "Scripts/Без названия.md",
-    "Scripts/cubepanel.js",
-    "Scripts/Новий Текстовый документ.txt",
     "Шаблоны/тестовый персонаж.md",
+    "Scripts/Панель мастера.md",
+    "Scripts/gmroll.js",
+    "Scripts/Новий Текстовый документ.txt",
+    "Персонажи/Зеновия.md",
+    "Scripts/cubepanel.js",
     "Портреты/Риас.jpg",
     "Персонажи/Мэрлин Амброзиус.md",
     "Предметы/Дюрандаль.md",
@@ -237,7 +238,6 @@
     "Scripts/rolltodiscord.js.md",
     "Жизненная энергия.md",
     "Scripts",
-    "Персонажи",
     "Структура жизни.canvas",
     "Священные механизмы.md",
     "Устройство мира.md",
@@ -251,7 +251,6 @@
     "Преисподняя.md",
     "Христианство.md",
     "Магия.md",
-    "Религии.md",
-    "Сила воли.md"
+    "Религии.md"
   ]
 }
