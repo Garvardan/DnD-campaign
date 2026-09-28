@@ -14,12 +14,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Шаблоны/тестовый персонаж.md",
+                "file": "Персонажи/Зеновия.md",
                 "mode": "source",
-                "source": true
+                "source": false
               },
               "icon": "lucide-file",
-              "title": "тестовый персонаж"
+              "title": "Зеновия"
             }
           }
         ]
@@ -180,9 +180,9 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Шаблоны/тестовый персонаж.md",
+                "file": "Персонажи/Зеновия.md",
                 "followCursor": false,
-                "showSearch": false,
+                "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
@@ -214,7 +214,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 200,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -231,8 +232,8 @@
   "active": "5287ea6da878c061",
   "lastOpenFiles": [
     "Персонажи/Зеновия.md",
-    "Персонажи/Толік.md",
     "Шаблоны/тестовый персонаж.md",
+    "Персонажи/Толік.md",
     "Scripts/Панель мастера.md",
     "Персонажи/Мэрлин Амброзиус.md",
     "Портреты/Риас.jpg",
