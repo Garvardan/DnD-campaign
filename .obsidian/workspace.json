@@ -14,12 +14,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Персонажи/Толік.md",
+                "file": "Персонажи/Зеновия.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Толік"
+              "title": "Зеновия"
             }
           }
         ]
@@ -180,7 +180,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Персонажи/Толік.md",
+                "file": "Персонажи/Зеновия.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -230,11 +230,11 @@
   },
   "active": "5287ea6da878c061",
   "lastOpenFiles": [
+    "Персонажи/Толік.md",
     "Шаблоны/тестовый персонаж.md",
     "Scripts/Панель мастера.md",
     "Персонажи/Зеновия.md",
     "Персонажи/Мэрлин Амброзиус.md",
-    "Персонажи/Толік.md",
     "Портреты/Риас.jpg",
     "Scripts/gmroll.js",
     "Scripts/Новий Текстовый документ.txt",
