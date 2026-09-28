@@ -137,24 +137,44 @@ if (
 // КРАСИВЫЙ РЕЗУЛЬТАТ
 // ================================
 
-const diceResult =
-    roller.children[0].result;
-
-const bonus =
-    result - diceResult;
+// Получаем отображение ВСЕХ кубов
+let details = roller.getDisplayText();
 
 
-let details =
-    `${roller.children[0].display}`;
+// Складываем только обычные числовые бонусы,
+// но не трогаем результаты кубов в []
+details = details.replace(
+    /((?:\s*[+-]\s*\d+){2,})/g,
+    (part) => {
 
+        const numbers =
+            [...part.matchAll(/([+-])\s*(\d+)/g)];
 
-if (bonus > 0) {
-    details += ` + ${bonus}`;
-}
-else if (bonus < 0) {
-    details += ` - ${Math.abs(bonus)}`;
-}
+        const total =
+            numbers.reduce(
+                (sum, match) => {
 
+                    const value =
+                        Number(match[2]);
+
+                    return match[1] === "-"
+                        ? sum - value
+                        : sum + value;
+                },
+                0
+            );
+
+        if (total > 0) {
+            return ` + ${total}`;
+        }
+
+        if (total < 0) {
+            return ` - ${Math.abs(total)}`;
+        }
+
+        return "";
+    }
+);
 
 // ================================
 // ПОИСК ПОРТРЕТА

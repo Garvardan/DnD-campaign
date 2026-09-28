@@ -3,6 +3,14 @@
     "aliases": "aliases",
     "cssclasses": "multitext",
     "tags": "tags",
-    "number": "number"
+    "number": "number",
+    "d2_count": "number",
+    "d4_count": "number",
+    "d6_count": "number",
+    "d8_count": "number",
+    "d10_count": "number",
+    "d12_count": "number",
+    "d20_count": "number",
+    "d100_count": "number"
   }
 }
