@@ -16,7 +16,7 @@
               "state": {
                 "file": "Персонажи/Зеновия.md",
                 "mode": "source",
-                "source": false
+                "source": true
               },
               "icon": "lucide-file",
               "title": "Зеновия"
@@ -230,12 +230,12 @@
   },
   "active": "5287ea6da878c061",
   "lastOpenFiles": [
+    "Шаблоны/тестовый персонаж.md",
+    "Персонажи/Зеновия.md",
     "Персонажи/Мэрлин Амброзиус.md",
     "Персонажи/Толік.md",
     "Scripts/Панель мастера.md",
-    "Персонажи/Зеновия.md",
     "Портреты/Риас.jpg",
-    "Шаблоны/тестовый персонаж.md",
     "Scripts/gmroll.js",
     "Scripts/Новий Текстовый документ.txt",
     "Scripts/cubepanel.js",
