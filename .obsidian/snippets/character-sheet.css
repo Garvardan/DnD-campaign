@@ -1,55 +1,17 @@
-.markdown-preview-view.character-sheet .markdown-preview-sizer {
-    width:1600 px;
-}
+/* Заголовки ## в Reading View */
+.markdown-preview-view.character-sheet h2,
 
-.character-sheet p,
-.character-sheet .block-language-meta-bind-button,
-.character-sheet .meta-bind-button,
-.character-sheet h2,
-.character-sheet h3 {
-    break-inside: avoid;
-}
+/* Заголовки ## в Live Preview */
+.markdown-source-view.character-sheet .cm-line.HyperMD-header-2 {
+    background: var(--background-secondary) !important;
 
-.character-sheet .meta-bind-button {
-    display: inline-flex !important;
-    width: fit-content !important;
-    max-width: max-content !important;
-}
-.character-sheet .block-language-meta-bind-button {
-    display: inline-block;
-    margin-right: 6px;
-    margin-bottom: 6px;
-}
-/* Контейнер Meta Bind кнопки в Live Preview */
-.character-sheet .cm-embed-block:has(.block-language-meta-bind-button) {
-    display: inline-block !important;
-    width: fit-content !important;
-    max-width: max-content !important;
+    border-left: 4px solid var(--interactive-accent) !important;
 
-    margin-right: 6px;
-    margin-bottom: 6px;
+    padding: 8px 12px !important;
+    margin-top: 18px !important;
+    margin-bottom: 8px !important;
 
-    vertical-align: top;
-}
+    border-radius: 6px;
 
-/* Сама кнопка */
-.character-sheet .block-language-meta-bind-button,
-.character-sheet .meta-bind-button {
-    width: fit-content !important;
-    max-width: max-content !important;
-}
-
-.character-sheet .cm-preview-code-block:has(> .block-language-meta-bind-button) {
-    display: inline-block !important;
-    width: fit-content !important;
-    max-width: max-content !important;
-
-    margin-right: 6px !important;
-    margin-bottom: 6px !important;
-
-    vertical-align: top;
-}
-
-.character-sheet .cm-preview-code-block:has(> .block-language-meta-bind-button) .edit-block-button {
-    display: none !important;
+    box-sizing: border-box;
 }

@@ -32,6 +32,7 @@
           {
             "id": "00ddc563584d1ae8",
             "type": "leaf",
+            "pinned": true,
             "state": {
               "type": "markdown",
               "state": {
@@ -39,6 +40,7 @@
                 "mode": "preview",
                 "source": false
               },
+              "pinned": true,
               "icon": "lucide-file",
               "title": "Панель мастера"
             }
@@ -228,14 +230,14 @@
   },
   "active": "5287ea6da878c061",
   "lastOpenFiles": [
+    "Портреты/Риас.jpg",
+    "Персонажи/Зеновия.md",
     "Персонажи/Толік.md",
     "Scripts/Панель мастера.md",
     "Шаблоны/тестовый персонаж.md",
     "Scripts/gmroll.js",
     "Scripts/Новий Текстовый документ.txt",
-    "Персонажи/Зеновия.md",
     "Scripts/cubepanel.js",
-    "Портреты/Риас.jpg",
     "Персонажи/Мэрлин Амброзиус.md",
     "Предметы/Дюрандаль.md",
     "Портреты/Зеновия.jpg",
