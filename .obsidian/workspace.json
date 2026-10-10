@@ -6,22 +6,8 @@
       {
         "id": "31f44d8a5604ea88",
         "type": "tabs",
-        "dimension": 79.94186046511628,
+        "dimension": 85.46511627906976,
         "children": [
-          {
-            "id": "5287ea6da878c061",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Заклинания/1 круг/Щит.md",
-                "mode": "preview",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Щит"
-            }
-          },
           {
             "id": "4c84ddbe13f79530",
             "type": "leaf",
@@ -32,13 +18,12 @@
               "title": "Граф"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       },
       {
         "id": "551e2f4589828c92",
         "type": "tabs",
-        "dimension": 20.058139534883722,
+        "dimension": 14.534883720930234,
         "children": [
           {
             "id": "00ddc563584d1ae8",
@@ -242,8 +227,8 @@
   },
   "active": "4c84ddbe13f79530",
   "lastOpenFiles": [
-    "Заклинания/README.md",
     "Персонажи/Риас.md",
+    "Заклинания/README.md",
     "Заклинания/Заговоры/Заговоры.md",
     "Заклинания/9 круг/9 круг.md",
     "Заклинания/8 круг/8 круг.md",
