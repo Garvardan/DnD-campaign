@@ -228,10 +228,11 @@
       "bases:Создать новую базу": false
     }
   },
-  "active": "5287ea6da878c061",
+  "active": "00ddc563584d1ae8",
   "lastOpenFiles": [
-    "Scripts/Панель мастера.md",
     "Шаблоны/тестовый персонаж.md",
+    "Scripts/rest.js",
+    "Scripts/Панель мастера.md",
     "Персонажи/Риас.md",
     "Персонажи/Толік.md",
     "Персонажи/Зеновия Кварта.md",
@@ -264,7 +265,6 @@
     "Scripts/rolltodiscord.js",
     "Scripts/rolltodiscord.js.md",
     "Жизненная энергия.md",
-    "Scripts",
     "Структура жизни.canvas",
     "Священные механизмы.md",
     "Устройство мира.md",
