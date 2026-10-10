@@ -24,15 +24,11 @@ try {
                 fm.hp = Number(fm.max_hp);
                 updated.push("HP");
             }
-            // Длинный отдых возвращает до половины общего числа
-            // Костей Хитов персонажа (минимум 1) по D&D 5e 2014.
+            // Правило кампании: длинный отдых восстанавливает ВСЕ Кости Хитов.
             if (valid(fm.lvl) && fm.hit_dice !== undefined) {
                 const max = Math.max(0, Math.floor(Number(fm.lvl)));
-                const current = valid(fm.hit_dice) ? Math.max(0, Math.floor(Number(fm.hit_dice))) : 0;
-                const regained = max ? Math.max(1, Math.floor(max / 2)) : 0;
-                const next = Math.min(max, current + regained);
-                if (next !== Number(fm.hit_dice)) {
-                    fm.hit_dice = next;
+                if (Number(fm.hit_dice) !== max) {
+                    fm.hit_dice = max;
                     updated.push("Кости Хитов");
                 }
             }
