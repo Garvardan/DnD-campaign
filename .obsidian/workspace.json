@@ -15,7 +15,7 @@
               "type": "markdown",
               "state": {
                 "file": "Персонажи/Зеновия Кварта.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
@@ -228,12 +228,12 @@
       "bases:Создать новую базу": false
     }
   },
-  "active": "00ddc563584d1ae8",
+  "active": "5287ea6da878c061",
   "lastOpenFiles": [
+    "Персонажи/Риас.md",
     "Персонажи/Зеновия Кварта.md",
     "Scripts/Панель мастера.md",
     "Портреты/Зеновия.jpg",
-    "Персонажи/Риас.md",
     "Шаблоны/тестовый персонаж.md",
     "Scripts/rest.js",
     "Персонажи/Толік.md",
