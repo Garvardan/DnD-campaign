@@ -65,9 +65,9 @@ new Notice(
 
 // Например:
 //
-// 2d[proficiency]
+// 2d[prof]
 //
-// при proficiency: 6
+// при prof: 6
 //
 // станет:
 //
