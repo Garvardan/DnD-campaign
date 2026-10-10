@@ -26,12 +26,13 @@ const spellFiles = app.vault.getMarkdownFiles()
         };
     }).filter(Boolean);
 const selectedClass = String(current.character_class ?? "");
+const filterClass = selectedClass && selectedClass !== "Нет";
 const items = action === "add" ?
     spellFiles.filter(s => !addedPaths.includes(s.path)) :
     spellFiles.filter(s => addedPaths.includes(s.path));
 items.sort((a, b) => {
-    const aMatch = a.classes.includes(selectedClass) ? 0 : 1;
-    const bMatch = b.classes.includes(selectedClass) ? 0 : 1;
+    const aMatch = !filterClass || a.classes.includes(selectedClass) ? 0 : 1;
+    const bMatch = !filterClass || b.classes.includes(selectedClass) ? 0 : 1;
     // Для добавления вначале показываем заклинания выбранного класса.
     if (action === "add" && aMatch !== bMatch) return aMatch - bMatch;
     return a.level - b.level || a.file.basename.localeCompare(b.file.basename, "ru");
@@ -45,7 +46,7 @@ class SpellPicker extends FuzzySuggestModal {
     getItems() { return items; }
     getItemText(s) {
         const label = s.level === 0 ? "Заговор" : s.level + " круг";
-        const note = selectedClass && !s.classes.includes(selectedClass) ?
+        const note = filterClass && !s.classes.includes(selectedClass) ?
             " · другой класс" : "";
         return label + " — " + s.file.basename + note;
     }
