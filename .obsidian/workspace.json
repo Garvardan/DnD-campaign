@@ -12,10 +12,14 @@
             "id": "5287ea6da878c061",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Граф"
+              "type": "markdown",
+              "state": {
+                "file": "Персонажи/Риас.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Риас"
             }
           }
         ]
@@ -227,6 +231,8 @@
   },
   "active": "5287ea6da878c061",
   "lastOpenFiles": [
+    "Портреты/Риас.jpg",
+    "Персонажи/Риас.md",
     "Шаблоны/тестовый персонаж.md",
     "Персонажи/Зеновия Кварта.md",
     "Экскалибур Мимикрии.md",
@@ -236,7 +242,6 @@
     "Персонажи/Толік.md",
     "Предметы/Дюрандаль.md",
     "Персонажи/Мэрлин Амброзиус.md",
-    "Портреты/Риас.jpg",
     "Scripts/gmroll.js",
     "Scripts/Новий Текстовый документ.txt",
     "Scripts/cubepanel.js",
@@ -271,8 +276,6 @@
     "Pasted image 20260920020719.png",
     "Pasted image 20260920015555.png",
     "Шеол.md",
-    "Преисподняя.md",
-    "Христианство.md",
-    "Магия.md"
+    "Преисподняя.md"
   ]
 }
