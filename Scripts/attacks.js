@@ -29,7 +29,7 @@ function render(attacks) {
         const name = a.name.replace(/[\r\n\`<>[\]|]/g, " ");
         const bonus = a.attack_bonus.replace(/\`/g, "");
         const damage = a.damage.replace(/\`/g, "");
-        const attackFormula = "1d20 + (" + a.attack_bonus + ")";
+        const attackFormula = "1d20 + " + a.attack_bonus;
         const safe = s => JSON.stringify(s);
         return [
             "> [!main] " + name,
