@@ -17,11 +17,23 @@ const WEBHOOK_PRIVATE =
 // ФОРМУЛА
 // ================================
 
-const rawFormula =
-    context.args?.formula ?? "1d20";
-
-const rollName =
-    context.args?.name ?? "Бросок";
+// Meta Bind передаёт модификаторы клика через context.click.
+// Только кнопки броска атаки помечаются attackRoll: true.
+// Shift — преимущество, Alt — помеха; вместе взаимно отменяются.
+const isAttackRoll = context.args?.attackRoll === true;
+const shift = context.click?.shiftKey === true;
+const alt = context.click?.altKey === true;
+const rollMode = isAttackRoll && shift !== alt
+    ? (shift ? "advantage" : "disadvantage")
+    : "normal";
+const baseFormula = String(context.args?.formula ?? "1d20");
+const hasAttackD20 = /\b1d20\b/i.test(baseFormula);
+const rawFormula = hasAttackD20 && rollMode !== "normal"
+    ? baseFormula.replace(/\b1d20\b/i, rollMode === "advantage" ? "2d20kh1" : "2d20kl1")
+    : baseFormula;
+const rollName = String(context.args?.name ?? "Бросок") +
+    (hasAttackD20 && rollMode === "advantage" ? " (с преимуществом)" :
+     hasAttackD20 && rollMode === "disadvantage" ? " (с помехой)" : "");
 
 
 // ================================
@@ -158,7 +170,7 @@ function combineRollModifiers(displayText, rollResult) {
     if (!Number.isFinite(total)) return original;
 
     // Обычный вывод Dice Roller: [7], [3, 5], [7] + [4].
-    const dicePattern = /\[\s*\d+(?:\s*[,;]\s*\d+)*\s*\]/g;
+    const dicePattern = /\[\s*\d+d?(?:\s*[,;]\s*\d+d?)*\s*\]/g;
     const matches = [...original.matchAll(dicePattern)];
     if (!matches.length) return original;
 
@@ -182,8 +194,12 @@ function combineRollModifiers(displayText, rollResult) {
             }
         }
         const sign = between.endsWith("-") ? -1 : 1;
+        // "d" в отображении Dice Roller обозначает отброшенный кубик.
+        // Оставляем его видимым, но исключаем из суммы для модификатора.
         const values = match[0].slice(1, -1)
-            .split(/\s*[,;]\s*/).map(Number);
+            .split(/\s*[,;]\s*/)
+            .filter(value => !/d$/i.test(value))
+            .map(Number);
         if (values.some(value => !Number.isFinite(value))) return original;
 
         diceTotal += sign * values.reduce((sum, value) => sum + value, 0);
