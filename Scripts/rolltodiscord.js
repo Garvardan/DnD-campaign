@@ -73,8 +73,16 @@ new Notice(
 //
 // 2d6
 
+// Удобная запись количества и граней через свойства:
+// halfprofDstr_mod -> [halfprof]d[str_mod].
+// Обычные 4d6, 1d20 и другие формулы остаются без изменений.
+const normalizedFormula = String(rawFormula).replace(
+    /\b([A-Za-z_][A-Za-z0-9_]*?)D([A-Za-z_][A-Za-z0-9_]*)\b/g,
+    (_, count, sides) => "[" + count + "]d[" + sides + "]"
+);
+
 const formula =
-    rawFormula.replace(
+    normalizedFormula.replace(
         /\[([A-Za-z_][A-Za-z0-9_]*)\]/g,
         (_, property) => {
 
