@@ -13,10 +13,16 @@ if (!["add", "remove"].includes(action)) {
     return;
 }
 
-const parseFeat = item => ({
-    name: typeof item === "string" ? item.trim() : String(item?.name ?? "").trim(),
-    url: typeof item === "string" ? "" : String(item?.url ?? "").trim()
-});
+const parseFeat = item => {
+    if (typeof item === "string") return { name: item.trim(), description: "" };
+    // Старые ссылки сохраняем, чтобы не потерять существующие записи.
+    const feat = {
+        name: String(item?.name ?? "").trim(),
+        description: String(item?.description ?? "")
+    };
+    if (item?.url) feat.url = String(item.url);
+    return feat;
+};
 const readFeats = fm => (Array.isArray(fm.character_feats) ? fm.character_feats : [])
     .map(parseFeat).filter(item => item.name);
 const normalize = name => name.toLocaleLowerCase("ru").trim();
@@ -26,33 +32,35 @@ if (action === "add") {
         onOpen() {
             this.contentEl.empty();
             this.contentEl.createEl("h3", { text: "Добавить черту" });
-            let nameField, urlField;
+            let nameField;
             new Setting(this.contentEl)
                 .setName("Название черты")
                 .addText(input => {
                     nameField = input;
                     input.setPlaceholder("Например, Устойчивый");
                 });
-            new Setting(this.contentEl)
-                .setName("Ссылка на описание (необязательно)")
-                .setDesc("Сохраняется только ссылка, отдельная заметка не создаётся.")
-                .addText(input => {
-                    urlField = input;
-                    input.setPlaceholder("https://...");
-                });
+            this.contentEl.createEl("div", {
+                text: "Описание черты (необязательно)",
+                cls: "setting-item-name"
+            });
+            const descriptionField = this.contentEl.createEl("textarea", {
+                attr: { rows: "10", placeholder: "Вставь сюда описание, особенности и условия черты..." }
+            });
+            descriptionField.style.display = "block";
+            descriptionField.style.width = "100%";
+            descriptionField.style.minHeight = "160px";
+            descriptionField.style.resize = "vertical";
+            descriptionField.style.marginTop = "8px";
+            descriptionField.style.marginBottom = "12px";
             new Setting(this.contentEl)
                 .addButton(button => button
                     .setButtonText("Добавить")
                     .setCta()
                     .onClick(async () => {
                         const name = nameField.getValue().trim();
-                        const url = urlField.getValue().trim();
+                        const description = descriptionField.value.trim();
                         if (!name || name.length > 120) {
                             new Notice("Укажи название черты (до 120 символов).");
-                            return;
-                        }
-                        if (url && (!/^https?:\/\/\S+$/i.test(url) || url.length > 700)) {
-                            new Notice("Ссылка должна начинаться с https:// или http://.");
                             return;
                         }
                         button.setDisabled(true);
@@ -62,7 +70,7 @@ if (action === "add") {
                                 if (known.some(feat => normalize(feat.name) === normalize(name))) {
                                     throw new Error("Такая черта уже есть у персонажа.");
                                 }
-                                fm.character_feats = [...known, { name, url }];
+                                fm.character_feats = [...known, { name, description }];
                             });
                             this.close();
                             new Notice("Добавлена черта: " + name);
