@@ -20,6 +20,11 @@ try {
     await app.fileManager.processFrontMatter(file, fm => {
         // Короткий отдых не лечит автоматически и не тратит Кости Хитов.
         if (!isShort) {
+            // По правилам 5e временные HP исчезают после длинного отдыха.
+            if (valid(fm.temp_hp) && Number(fm.temp_hp) !== 0) {
+                fm.temp_hp = 0;
+                updated.push("временные HP");
+            }
             if (valid(fm.max_hp) && fm.hp !== undefined && Number(fm.hp) !== Number(fm.max_hp)) {
                 fm.hp = Number(fm.max_hp);
                 updated.push("HP");
