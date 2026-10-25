@@ -38,10 +38,10 @@ try {
         for (const flag of Object.keys(fm).filter(k => k.endsWith("_rest_short"))) {
             if (isShort && !marked(fm[flag])) continue;
             const key = flag.slice(0, -"_rest_short".length);
-            if (key === "mana_spent") {
-                if (fm.mana_spent !== undefined && Number(fm.mana_spent) !== 0) {
-                    fm.mana_spent = 0;
-                    updated.push("мана");
+            if (key === "mana_spent" || key === "metamagic_spent") {
+                if (fm[key] !== undefined && Number(fm[key]) !== 0) {
+                    fm[key] = 0;
+                    updated.push(key === "mana_spent" ? "мана" : "очки метамагии");
                 }
                 continue;
             }
