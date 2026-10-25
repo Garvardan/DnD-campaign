@@ -141,68 +141,62 @@ if (
 let details = roller.getDisplayText();
 
 
-// Складываем только обычные числовые бонусы,
-// но не трогаем результаты кубов в []
-details = details.replace(
-    /((?:\s*[+-]\s*\d+){2,})/g,
-    (part) => {
+// Объединяем все числовые модификаторы броска в одно число.
+// Значения кубиков и итог result сохраняются: для вывода вычитаем
+// сумму фактически выпавших кубиков из результата броска.
+function combineRollModifiers(displayText, rollResult) {
+    const original = String(displayText ?? "");
+    const total = Number(rollResult);
+    if (!Number.isFinite(total)) return original;
 
-        const numbers =
-            [...part.matchAll(/([+-])\s*(\d+)/g)];
+    // Обычный вывод Dice Roller: [7], [3, 5], [7] + [4].
+    const dicePattern = /\[\s*\d+(?:\s*[,;]\s*\d+)*\s*\]/g;
+    const matches = [...original.matchAll(dicePattern)];
+    if (!matches.length) return original;
 
-        const total =
-            numbers.reduce(
-                (sum, match) => {
+    // Для нестандартных кубиков и выражений с группировками
+    // сохраняем оригинальный вывод, чтобы не менять смысл броска.
+    const masked = original.replace(dicePattern, "D");
+    if (!/^[\s\d.D+\-*/]*$/.test(masked)) return original;
 
-                    const value =
-                        Number(match[2]);
-
-                    return match[1] === "-"
-                        ? sum - value
-                        : sum + value;
-                },
-                0
-            );
-
-        if (total > 0) {
-            return ` + ${total}`;
-        }
-
-        if (total < 0) {
-            return ` - ${Math.abs(total)}`;
-        }
-
-        return "";
-    }
-);
-
-// Dice Roller иногда отображает спасброски как [7] + 4 * 3,
-// хотя вычисляет их как [7] + 3 + (1 * 3).
-// Для стандартных спасбросков исправляем только текст, не бросок и не result.
-const savingThrow = String(rawFormula).trim().match(
-    /^1d20\s*\+\s*(str|dex|con|int|wis|cha)_mod\s*\+\s*\1_save_prof\s*\*\s*prof\s*$/i
-);
-if (savingThrow) {
-    const ability = savingThrow[1].toLowerCase();
-    const modifier = Number(frontmatter[ability + "_mod"]);
-    const saveProficiency = Number(frontmatter[ability + "_save_prof"]);
-    const proficiencyBonus = Number(frontmatter.prof);
-    const die = details.match(/\[(\d+)\]/);
-
-    if (die && [modifier, saveProficiency, proficiencyBonus].every(Number.isFinite)) {
-        const dieRoll = Number(die[1]);
-        const saveBonus = saveProficiency * proficiencyBonus;
-        // Защита от расхождения между отображением и фактическим результатом.
-        if (Number(result) === dieRoll + modifier + saveBonus) {
-            const parts = ["[" + dieRoll + "]"];
-            for (const bonus of [modifier, saveBonus]) {
-                if (bonus > 0) parts.push("+ " + bonus);
-                if (bonus < 0) parts.push("- " + Math.abs(bonus));
+    let diceTotal = 0;
+    let cursor = 0;
+    const rolls = [];
+    for (const [index, match] of matches.entries()) {
+        const between = original.slice(cursor, match.index).trim();
+        // Кубики должны быть отдельными слагаемыми, а не
+        // множителями или делителями.
+        if (index === 0) {
+            if (between && !/[+-]$/.test(between)) return original;
+        } else {
+            if (!between || !/^[+-]/.test(between) || !/[+-]$/.test(between)) {
+                return original;
             }
-            details = parts.join(" ");
         }
+        const sign = between.endsWith("-") ? -1 : 1;
+        const values = match[0].slice(1, -1)
+            .split(/\s*[,;]\s*/).map(Number);
+        if (values.some(value => !Number.isFinite(value))) return original;
+
+        diceTotal += sign * values.reduce((sum, value) => sum + value, 0);
+        rolls.push({ sign, text: match[0] });
+        cursor = match.index + match[0].length;
     }
+    const tail = original.slice(cursor).trim();
+    if (tail && !/^[+-]/.test(tail)) return original;
+
+    const bonus = Number((total - diceTotal).toFixed(8));
+    let compact = rolls.map((roll, index) => {
+        if (index === 0) return roll.sign < 0 ? "- " + roll.text : roll.text;
+        return (roll.sign < 0 ? " - " : " + ") + roll.text;
+    }).join("");
+
+    if (bonus > 0) compact += " + " + bonus;
+    if (bonus < 0) compact += " - " + Math.abs(bonus);
+    return compact;
 }
+
+details = combineRollModifiers(details, result);
 
 // ================================
 // ПОИСК ПОРТРЕТА
