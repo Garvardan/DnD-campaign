@@ -176,6 +176,34 @@ details = details.replace(
     }
 );
 
+// Dice Roller иногда отображает спасброски как [7] + 4 * 3,
+// хотя вычисляет их как [7] + 3 + (1 * 3).
+// Для стандартных спасбросков исправляем только текст, не бросок и не result.
+const savingThrow = String(rawFormula).trim().match(
+    /^1d20\s*\+\s*(str|dex|con|int|wis|cha)_mod\s*\+\s*\1_save_prof\s*\*\s*prof\s*$/i
+);
+if (savingThrow) {
+    const ability = savingThrow[1].toLowerCase();
+    const modifier = Number(frontmatter[ability + "_mod"]);
+    const saveProficiency = Number(frontmatter[ability + "_save_prof"]);
+    const proficiencyBonus = Number(frontmatter.prof);
+    const die = details.match(/\[(\d+)\]/);
+
+    if (die && [modifier, saveProficiency, proficiencyBonus].every(Number.isFinite)) {
+        const dieRoll = Number(die[1]);
+        const saveBonus = saveProficiency * proficiencyBonus;
+        // Защита от расхождения между отображением и фактическим результатом.
+        if (Number(result) === dieRoll + modifier + saveBonus) {
+            const parts = ["[" + dieRoll + "]"];
+            for (const bonus of [modifier, saveBonus]) {
+                if (bonus > 0) parts.push("+ " + bonus);
+                if (bonus < 0) parts.push("- " + Math.abs(bonus));
+            }
+            details = parts.join(" ");
+        }
+    }
+}
+
 // ================================
 // ПОИСК ПОРТРЕТА
 // ================================
