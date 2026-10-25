@@ -1,7 +1,7 @@
-// JS Engine + Meta Bind: применение урона или лечения к текущему листу персонажа.
+// JS Engine + Meta Bind: обычные и временные HP персонажа.
 const { Notice } = obsidian;
 const action = context.args?.action;
-if (!["damage", "heal"].includes(action)) {
+if (!["damage", "heal", "temp"].includes(action)) {
     new Notice("Неизвестное действие с HP.");
     return;
 }
@@ -11,7 +11,8 @@ if (!file || !(file.path.startsWith("Персонажи/") ||
     new Notice("Открой лист персонажа, чтобы изменить HP.");
     return;
 }
-const amountKey = action === "damage" ? "hp_damage" : "hp_healing";
+const amountKey = action === "damage" ? "hp_damage" :
+    action === "heal" ? "hp_healing" : "temp_hp_gain";
 try {
     let message = "";
     await app.fileManager.processFrontMatter(file, fm => {
@@ -19,32 +20,56 @@ try {
         const amount = Number(raw);
         if (raw === undefined || raw === null || raw === "" ||
             !Number.isSafeInteger(amount) || amount <= 0) {
-            throw new Error(action === "damage" ?
-                "Укажи положительное целое число урона." :
-                "Укажи положительное целое число лечения.");
+            throw new Error("Укажи положительное целое число для " +
+                (action === "damage" ? "урона." :
+                 action === "heal" ? "лечения." : "новых временных HP."));
         }
-        const original = fm.hp;
-        const hp = Number(original);
-        if (original === undefined || original === null || original === "" ||
-            !Number.isFinite(hp) || hp < 0) {
-            throw new Error("Сначала укажи текущее HP персонажа.");
+
+        const rawTemp = fm.temp_hp ?? 0;
+        const temp = Number(rawTemp);
+        if (!Number.isSafeInteger(temp) || temp < 0) {
+            throw new Error("Текущие временные HP должны быть неотрицательным целым числом.");
         }
-        let updated;
-        if (action === "damage") {
-            updated = Math.max(0, hp - amount);
+
+        if (action === "temp") {
+            // По правилам 5e временные HP не складываются. Оставляем большее значение.
+            const nextTemp = Math.max(temp, amount);
+            fm.temp_hp = nextTemp;
+            message = nextTemp === temp
+                ? "Временные HP не изменились (" + temp + "): новые " + amount +
+                  " не превосходят текущие."
+                : "Временные HP: " + temp + " → " + nextTemp + ".";
         } else {
-            const rawMax = fm.max_hp;
-            const max = Number(rawMax);
-            if (rawMax === undefined || rawMax === null || rawMax === "" ||
-                !Number.isFinite(max) || max < 0) {
-                throw new Error("Сначала укажи максимальное HP персонажа.");
+            const original = fm.hp;
+            const hp = Number(original);
+            if (original === undefined || original === null || original === "" ||
+                !Number.isFinite(hp) || hp < 0) {
+                throw new Error("Сначала укажи текущее HP персонажа.");
             }
-            updated = Math.min(max, hp + amount);
+
+            if (action === "damage") {
+                const absorbed = Math.min(amount, temp);
+                const remaining = amount - absorbed;
+                const nextTemp = temp - absorbed;
+                const nextHp = Math.max(0, hp - remaining);
+                fm.temp_hp = nextTemp;
+                fm.hp = nextHp;
+                message = "Урон " + amount + ": временные HP " + temp + " → " +
+                    nextTemp + ", обычные HP " + hp + " → " + nextHp + ".";
+            } else {
+                const rawMax = fm.max_hp;
+                const max = Number(rawMax);
+                if (rawMax === undefined || rawMax === null || rawMax === "" ||
+                    !Number.isFinite(max) || max < 0) {
+                    throw new Error("Сначала укажи максимальное HP персонажа.");
+                }
+                const nextHp = Math.min(max, hp + amount);
+                fm.hp = nextHp;
+                message = "Лечение " + amount + ": HP " + hp + " → " + nextHp +
+                    ". Временные HP: " + temp + ".";
+            }
         }
-        fm.hp = updated;
         fm[amountKey] = 0;
-        message = (action === "damage" ? "Урон: " : "Лечение: ") +
-            amount + ". HP: " + hp + " → " + updated + ".";
     });
     new Notice(message);
 } catch (error) {
