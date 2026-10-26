@@ -146,7 +146,7 @@
                         ? "" : String(this.target.charges));
                 });
             let rechargeShort = Boolean(this.target?.recharge_short);
-            let rechargeLong = this.target
+            let rechargeLong = this.target?.charges_max != null
                 ? Boolean(this.target.recharge_long) : true;
             new Setting(panel).setName("Короткий отдых")
                 .setDesc("Восстанавливать заряды при коротком отдыхе.")
