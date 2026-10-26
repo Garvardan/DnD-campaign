@@ -39,7 +39,6 @@
             const maximum = Math.max(0, nextBase + modifier * level);
             fm.hp_base = nextBase;
             fm.max_hp = maximum;
-            fm.hp_gain = 0; // защита от повторного начисления тем же числом
             message = "Прирост HP " + (amount > 0 ? "+" : "") + amount +
                 ". Основа: " + base + " → " + nextBase +
                 ". Модификатор ТЕЛ: " + (modifier >= 0 ? "+" : "") +
