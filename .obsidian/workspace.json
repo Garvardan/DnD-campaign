@@ -29,7 +29,7 @@
               "type": "markdown",
               "state": {
                 "file": "Персонажи/Зеновия Кварта.md",
-                "mode": "preview",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
@@ -244,7 +244,7 @@
       "workspaces:Пространства": false
     }
   },
-  "active": "b4ec29cbab021a00",
+  "active": "8594a88ba72ac92d",
   "lastOpenFiles": [
     "Scripts/abilities.js",
     "Персонажи/Риас.md",
