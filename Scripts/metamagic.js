@@ -41,6 +41,7 @@ class MetamagicPicker extends FuzzySuggestModal {
             fm.character_metamagic = action === "add"
                 ? [...new Set([...known, item.name])]
                 : known.filter(name => name !== item.name);
+            if (action === "remove") fm.character_metamagic_extra = (Array.isArray(fm.character_metamagic_extra) ? fm.character_metamagic_extra : []).filter(x => String(x?.name ?? "") !== item.name);
         }).then(() => {
             new Notice((action === "add" ? "Метамагия добавлена: " : "Метамагия удалена: ") + item.name);
         }).catch(error => new Notice("Ошибка метамагии: " + (error?.message ?? String(error))));
