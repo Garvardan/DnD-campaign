@@ -68,13 +68,16 @@
         let restored = 0;
         try {
             await app.fileManager.processFrontMatter(file, fm => {
-                const list = read(fm);
-                for (const ability of list) {
-                    if (ability.charges_max === null || ability.charges === ability.charges_max) continue;
-                    ability.charges = ability.charges_max;
+                const old = Array.isArray(fm.character_abilities) ? fm.character_abilities : [];
+                fm.character_abilities = old.map(item => {
+                    if (!item || typeof item !== "object" || Array.isArray(item)) return item;
+                    const max = Number(item.charges_max);
+                    if (!Number.isSafeInteger(max) || max < 1) return item;
+                    const current = item.charges == null ? max : Number(item.charges);
+                    if (current === max) return item;
                     restored++;
-                }
-                fm.character_abilities = list;
+                    return { ...item, charges: max };
+                });
             });
             new Notice(restored
                 ? "Заряды восстановлены у " + restored + " способностей."
