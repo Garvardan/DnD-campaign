@@ -62,6 +62,35 @@ try {
             fm.mana_spent = 0;
             if (!updated.includes("мана")) updated.push("мана");
         }
+
+        // Карточки способностей с индивидуальными флажками восстановления.
+        // Отсутствие charges_max означает способность без ограниченных зарядов.
+        if (Array.isArray(fm.character_abilities)) {
+            let restoredAbilities = 0;
+            fm.character_abilities = fm.character_abilities.map(raw => {
+                if (!raw || typeof raw !== "object" || Array.isArray(raw)) return raw;
+                const max = Number(raw.charges_max);
+                if (!Number.isSafeInteger(max) || max < 1) return raw;
+                const currentRaw = raw.charges === null || raw.charges === undefined
+                    ? max : Number(raw.charges);
+                const current = Number.isSafeInteger(currentRaw)
+                    ? Math.max(0, Math.min(max, currentRaw)) : max;
+                const legacy = String(raw.recharge ?? "").toLocaleLowerCase("ru");
+                const hasShort = raw.recharge_short !== undefined && raw.recharge_short !== null;
+                const hasLong = raw.recharge_long !== undefined && raw.recharge_long !== null;
+                const restoreShort = hasShort ? marked(raw.recharge_short)
+                    : /коротк|short/.test(legacy);
+                const restoreLong = hasLong ? marked(raw.recharge_long)
+                    : /длинн|продолжительн|long/.test(legacy) || !legacy.trim();
+                if (!(isShort ? restoreShort : restoreLong) || current === max) return raw;
+                restoredAbilities++;
+                return { ...raw, charges: max };
+            });
+            if (restoredAbilities) {
+                updated.push("способности ×" + restoredAbilities);
+            }
+        }
+
     });
     const label = isShort ? "Короткий отдых" : "Длинный отдых";
     new Notice(updated.length ? label + " (" + file.basename + "): " + updated.join(", ") :
