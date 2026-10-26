@@ -57,6 +57,7 @@ class SpellPicker extends FuzzySuggestModal {
             fm.character_spells = action === "add" ?
                 [...new Set([...existing, spell.path])] :
                 existing.filter(p => p !== spell.path);
+            if (action === "remove") fm.character_spell_extra = (Array.isArray(fm.character_spell_extra) ? fm.character_spell_extra : []).filter(x => String(x?.path ?? "") !== spell.path);
         }).then(() => {
             new Notice((action === "add" ? "Добавлено: " : "Убрано: ") +
                 spell.file.basename);
