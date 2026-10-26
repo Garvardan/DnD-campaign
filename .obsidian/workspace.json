@@ -29,7 +29,7 @@
               "type": "markdown",
               "state": {
                 "file": "Персонажи/Зеновия Кварта.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
@@ -246,6 +246,7 @@
   },
   "active": "8594a88ba72ac92d",
   "lastOpenFiles": [
+    "Scripts/level-hp.js",
     "Scripts/abilities.js",
     "Персонажи/Риас.md",
     "Предметы/Каталог.md",
@@ -281,7 +282,6 @@
     "Заклинания/1 круг/Руки Хадара.md",
     "Заклинания/1 круг/Щит.md",
     "Заклинания/1 круг/Чудо-ягоды.md",
-    "Заклинания/Заговоры",
     "Портреты/Зеновия.jpg",
     "Портреты/Риас.jpg",
     "Pasted image 20260928120357.png",
