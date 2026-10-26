@@ -113,16 +113,16 @@
             let chargeEnabled = this.target?.charges_max !== null &&
                 this.target?.charges_max !== undefined;
             const chargeFields = {};
-            const chargePanel = this.contentEl.createDiv();
-            chargePanel.style.marginBottom = "12px";
+            let chargePanel = null;
             new Setting(this.contentEl).setName("Использует заряды")
                 .setDesc("Если выключено, способность не имеет счётчика использований.")
                 .addToggle(toggle => toggle.setValue(chargeEnabled)
                     .onChange(value => {
                         chargeEnabled = value;
-                        chargePanel.style.display = value ? "" : "none";
+                        if (chargePanel) chargePanel.style.display = value ? "" : "none";
                     }));
-            // Перемещаем панель под флажок, чтобы настройки шли в правильном порядке.
+            chargePanel = this.contentEl.createDiv();
+            chargePanel.style.marginBottom = "12px";
             const panel = chargePanel;
             const note = panel.createDiv({ cls: "setting-item-description",
                 text: "Текущее количество можно менять и после создания способности." });
