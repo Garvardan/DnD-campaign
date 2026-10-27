@@ -333,3 +333,48 @@
         flex: 1 1 100%;
     }
 }
+
+
+/* Кости хитов: количество / максимум на одной строке.
+   У этой строки есть единственный внутри панели HP Meta Bind VIEW
+   (максимум костей = уровень). Остальные строки остаются сеткой
+   «подпись — поле — кнопка». */
+.character-sheet .callout[data-callout="character-health"]
+  > .callout-content > p:has(.mb-view-wrapper) {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    white-space: nowrap;
+}
+.character-sheet .callout[data-callout="character-health"]
+  > .callout-content > p:has(.mb-view-wrapper) > .mb-input-wrapper {
+    display: inline-flex;
+    flex: 0 0 95px;
+    width: 95px;
+    max-width: 95px;
+}
+.character-sheet .callout[data-callout="character-health"]
+  > .callout-content > p:has(.mb-view-wrapper) input[type="number"] {
+    width: 95px !important;
+    max-width: 95px;
+}
+.character-sheet .callout[data-callout="character-health"]
+  > .callout-content > p:has(.mb-view-wrapper) .mb-view-wrapper {
+    display: inline-flex;
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+@container character-dashboard (max-width: 400px) {
+    .character-sheet .callout[data-callout="character-health"]
+      > .callout-content > p:has(.mb-view-wrapper) > .mb-input-wrapper {
+        flex-basis: 68px;
+        width: 68px;
+        max-width: 68px;
+    }
+    .character-sheet .callout[data-callout="character-health"]
+      > .callout-content > p:has(.mb-view-wrapper) input[type="number"] {
+        width: 68px !important;
+    }
+}
