@@ -15,3 +15,157 @@
 
     box-sizing: border-box;
 }
+
+/* ─────────────────────────────────────────────────────────────
+   D&D: компактная панель персонажа.
+   Только стили — Meta Bind, Dataview и JS Engine продолжают
+   обрабатывать собственные INPUT / VIEW / BUTTON без подмены.
+   Область действия: заметки с cssclasses: character-sheet.
+   ───────────────────────────────────────────────────────────── */
+.character-sheet .callout[data-callout="character-dashboard"] {
+    --callout-color: 115, 137, 200;
+    --callout-icon: lucide-layout-dashboard;
+    background: var(--background-secondary);
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 14px;
+    padding: 14px;
+    margin: 1.2em 0;
+    container-type: inline-size;
+    container-name: character-dashboard;
+}
+
+.character-sheet .callout[data-callout="character-dashboard"] > .callout-title {
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 2px 3px 11px;
+}
+
+/* На широком листе здоровье и защита расположены рядом. */
+.character-sheet .callout[data-callout="character-dashboard"] > .callout-content {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    align-items: start;
+}
+
+.character-sheet .callout[data-callout="character-dashboard"] > .callout-content > .callout {
+    min-width: 0;
+    margin: 0;
+    padding: 12px 14px;
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 10px;
+    background: var(--background-primary);
+    box-shadow: none;
+}
+
+.character-sheet .callout[data-callout="character-profile"] {
+    --callout-color: 115, 151, 221;
+    --callout-icon: lucide-user-round;
+    grid-column: 1 / -1;
+}
+.character-sheet .callout[data-callout="character-health"] {
+    --callout-color: 201, 102, 126;
+    --callout-icon: lucide-heart-pulse;
+}
+.character-sheet .callout[data-callout="character-defense"] {
+    --callout-color: 111, 177, 194;
+    --callout-icon: lucide-shield;
+}
+.character-sheet .callout[data-callout="character-rest"] {
+    --callout-color: 168, 143, 218;
+    --callout-icon: lucide-moon;
+    grid-column: 1 / -1;
+}
+.character-sheet .callout[data-callout^="character-"] > .callout-title {
+    padding: 0 0 9px;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+.character-sheet .callout[data-callout^="character-"] > .callout-content {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+.character-sheet .callout[data-callout^="character-"] > .callout-content > p {
+    margin: 0 0 8px;
+    line-height: 1.45;
+}
+.character-sheet .callout[data-callout^="character-"] > .callout-content > p:last-child {
+    margin-bottom: 0;
+}
+
+/* Данные персонажа в шапке — компактной сеткой. */
+.character-sheet .callout[data-callout="character-profile"] > .callout-content {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px 16px;
+}
+.character-sheet .callout[data-callout="character-profile"] > .callout-content > p {
+    min-width: 0;
+    margin: 0;
+}
+
+/* Внутри здоровья/защиты все стандартные Meta Bind элементы видимы. */
+.character-sheet .callout[data-callout="character-health"] > .callout-content > p,
+.character-sheet .callout[data-callout="character-defense"] > .callout-content > p,
+.character-sheet .callout[data-callout="character-rest"] > .callout-content > p {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px 8px;
+}
+.character-sheet .callout[data-callout="character-dashboard"] .mb-input-wrapper {
+    min-width: 0;
+    max-width: 100%;
+}
+.character-sheet .callout[data-callout="character-dashboard"] input[type="number"]:not([readonly]) {
+    width: 6rem;
+    max-width: 100%;
+}
+.character-sheet .callout[data-callout="character-dashboard"] input[type="text"] {
+    max-width: 100%;
+}
+.character-sheet .callout[data-callout="character-dashboard"] .mb-button button,
+.character-sheet .callout[data-callout="character-dashboard"] button.mb-button {
+    font-size: 0.8rem;
+    padding: 5px 9px;
+}
+
+/* Результат КД остаётся DataviewJS, но визуально встроен в защиту. */
+.character-sheet .callout[data-callout="character-defense"] .character-ac-result {
+    margin: 10px 0 3px !important;
+    padding: 8px 10px;
+    background: var(--background-secondary);
+    border-radius: 8px;
+}
+.character-sheet .callout[data-callout="character-defense"] .character-ac-result input[readonly] {
+    background: var(--background-primary-alt);
+    border: 1px solid var(--background-modifier-border);
+    color: var(--text-normal);
+}
+
+/* Восстановление ресурсов выводим отдельной горизонтальной панелью. */
+.character-sheet .callout[data-callout="character-rest"] > .callout-content > p {
+    gap: 8px;
+    margin: 0;
+}
+
+/* Адаптация по ширине именно листа Obsidian, а не всего окна. */
+@container character-dashboard (max-width: 720px) {
+    .callout[data-callout="character-dashboard"] > .callout-content {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .callout[data-callout="character-dashboard"] > .callout-content > .callout {
+        grid-column: 1 / -1;
+    }
+    .callout[data-callout="character-profile"] > .callout-content {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+@container character-dashboard (max-width: 430px) {
+    .callout[data-callout="character-profile"] > .callout-content {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .callout[data-callout="character-dashboard"] > .callout-content > .callout {
+        padding: 10px;
+    }
+}
