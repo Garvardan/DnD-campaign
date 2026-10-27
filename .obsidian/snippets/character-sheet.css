@@ -150,7 +150,7 @@
 }
 
 /* Адаптация по ширине именно листа Obsidian, а не всего окна. */
-@container character-dashboard (max-width: 720px) {
+@container character-dashboard (max-width: 620px) {
     .callout[data-callout="character-dashboard"] > .callout-content {
         grid-template-columns: minmax(0, 1fr);
     }
