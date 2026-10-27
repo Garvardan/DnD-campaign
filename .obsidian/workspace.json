@@ -28,12 +28,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Персонажи/Зеновия Кварта.md",
+                "file": "Персонажи/Риас.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Зеновия Кварта"
+              "title": "Риас"
             }
           }
         ],
@@ -246,8 +246,8 @@
   },
   "active": "8594a88ba72ac92d",
   "lastOpenFiles": [
-    "Персонажи/Риас.md",
     "Персонажи/Зеновия Кварта.md",
+    "Персонажи/Риас.md",
     "Scripts/level-hp.js",
     "Scripts/abilities.js",
     "Предметы/Каталог.md",
