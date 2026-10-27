@@ -1,29 +1,22 @@
-/* Заголовки ## в Reading View */
+/* Дополнительное оформление заголовков в листах персонажей. */
 .markdown-preview-view.character-sheet h2,
-
-/* Заголовки ## в Live Preview */
 .markdown-source-view.character-sheet .cm-line.HyperMD-header-2 {
     background: var(--background-secondary) !important;
-
     border-left: 4px solid var(--interactive-accent) !important;
-
     padding: 8px 12px !important;
     margin-top: 18px !important;
     margin-bottom: 8px !important;
-
     border-radius: 6px;
-
     box-sizing: border-box;
 }
 
-/* ─────────────────────────────────────────────────────────────
-   D&D: компактная панель персонажа.
-   Только стили — Meta Bind, Dataview и JS Engine продолжают
-   обрабатывать собственные INPUT / VIEW / BUTTON без подмены.
-   Область действия: заметки с cssclasses: character-sheet.
-   ───────────────────────────────────────────────────────────── */
+/* Вариант 3: горизонтальный лист персонажа.
+   Управление и сохранение данных выполняют существующие Meta Bind
+   и JS Engine. DataviewJS рассчитывает КД; CSS лишь задаёт расположение.
+   Стили применяются только к заметкам с cssclasses: character-sheet. */
+
 .character-sheet .callout[data-callout="character-dashboard"] {
-    --callout-color: 115, 137, 200;
+    --callout-color: 121, 141, 210;
     --callout-icon: lucide-layout-dashboard;
     background: var(--background-secondary);
     border: 1px solid var(--background-modifier-border);
@@ -37,135 +30,306 @@
 .character-sheet .callout[data-callout="character-dashboard"] > .callout-title {
     font-size: 1rem;
     font-weight: 700;
-    padding: 2px 3px 11px;
+    padding: 2px 4px 12px;
 }
 
-/* На широком листе здоровье и защита расположены рядом. */
 .character-sheet .callout[data-callout="character-dashboard"] > .callout-content {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
     gap: 12px;
-    align-items: start;
+    min-width: 0;
 }
 
 .character-sheet .callout[data-callout="character-dashboard"] > .callout-content > .callout {
     min-width: 0;
     margin: 0;
-    padding: 12px 14px;
+    padding: 13px 16px;
+    background: var(--background-primary);
     border: 1px solid var(--background-modifier-border);
     border-radius: 10px;
-    background: var(--background-primary);
     box-shadow: none;
+    grid-column: 1 / -1;
 }
 
 .character-sheet .callout[data-callout="character-profile"] {
-    --callout-color: 115, 151, 221;
+    --callout-color: 111, 150, 218;
     --callout-icon: lucide-user-round;
-    grid-column: 1 / -1;
+}
+.character-sheet .callout[data-callout="character-summary"] {
+    --callout-color: 120, 148, 197;
+    --callout-icon: lucide-layout-grid;
+}
+.character-sheet .callout[data-callout="character-hitpoints"] {
+    --callout-color: 207, 108, 132;
+    --callout-icon: lucide-heart;
+}
+.character-sheet .callout[data-callout="character-armor"] {
+    --callout-color: 112, 177, 194;
+    --callout-icon: lucide-shield;
 }
 .character-sheet .callout[data-callout="character-health"] {
-    --callout-color: 201, 102, 126;
+    --callout-color: 207, 108, 132;
     --callout-icon: lucide-heart-pulse;
 }
 .character-sheet .callout[data-callout="character-defense"] {
-    --callout-color: 111, 177, 194;
+    --callout-color: 112, 177, 194;
     --callout-icon: lucide-shield;
 }
 .character-sheet .callout[data-callout="character-rest"] {
-    --callout-color: 168, 143, 218;
+    --callout-color: 170, 148, 221;
     --callout-icon: lucide-moon;
-    grid-column: 1 / -1;
 }
+
 .character-sheet .callout[data-callout^="character-"] > .callout-title {
-    padding: 0 0 9px;
-    font-size: 0.9rem;
+    padding: 0 0 10px;
+    font-size: .91rem;
     font-weight: 700;
 }
 .character-sheet .callout[data-callout^="character-"] > .callout-content {
     min-width: 0;
-    overflow-wrap: anywhere;
 }
 .character-sheet .callout[data-callout^="character-"] > .callout-content > p {
-    margin: 0 0 8px;
-    line-height: 1.45;
-}
-.character-sheet .callout[data-callout^="character-"] > .callout-content > p:last-child {
-    margin-bottom: 0;
+    margin: 0;
+    line-height: 1.5;
 }
 
-/* Данные персонажа в шапке — компактной сеткой. */
+/* Компактная шапка: класс, уровень и мастерство не идут одним списком. */
 .character-sheet .callout[data-callout="character-profile"] > .callout-content {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 8px 16px;
+    gap: 10px 14px;
 }
 .character-sheet .callout[data-callout="character-profile"] > .callout-content > p {
     min-width: 0;
-    margin: 0;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    column-gap: 7px;
+    row-gap: 5px;
 }
 
-/* Внутри здоровья/защиты все стандартные Meta Bind элементы видимы. */
+/* Крупные HP и КД сверху, два показателя рядом. */
+.character-sheet .callout[data-callout="character-summary"] {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+}
+.character-sheet .callout[data-callout="character-summary"] > .callout-title {
+    display: none;
+}
+.character-sheet .callout[data-callout="character-summary"] > .callout-content {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 0;
+}
+.character-sheet .callout[data-callout="character-summary"] > .callout-content > .callout {
+    min-width: 0;
+    margin: 0;
+    padding: 14px 18px;
+    background: var(--background-primary);
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 10px;
+    box-shadow: none;
+}
+.character-sheet .callout[data-callout="character-summary"] > .callout-content > .callout > .callout-title {
+    font-size: .82rem;
+    padding-bottom: 8px;
+}
+.character-sheet .callout[data-callout="character-hitpoints"] > .callout-content > p {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    flex-wrap: wrap;
+    font-size: 1.35rem;
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+}
+.character-sheet .callout[data-callout="character-hitpoints"] input[type="number"] {
+    width: 95px !important;
+    font-size: 1.35rem;
+    font-weight: 650;
+    text-align: center;
+}
+.character-sheet .callout[data-callout="character-hitpoints"] .mb-view {
+    font-size: 1.35rem;
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Итоговый КД остаётся настоящим полем readOnly из DataviewJS. */
+.character-sheet .callout[data-callout="character-armor"] .character-ac-result {
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+}
+.character-sheet .callout[data-callout="character-armor"] .character-ac-result > label {
+    color: var(--text-muted);
+    font-size: .85rem;
+}
+.character-sheet .callout[data-callout="character-armor"] .character-ac-result > input[readonly] {
+    width: 90px !important;
+    height: 40px;
+    background: var(--background-primary-alt);
+    border: 1px solid var(--background-modifier-border);
+    color: var(--text-normal);
+    font-size: 1.35rem;
+    font-weight: 700;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+.character-sheet .callout[data-callout="character-armor"] .character-ac-result > small {
+    flex-basis: 100%;
+    color: var(--text-muted);
+    font-size: .75rem;
+}
+
+/* Одинаковые колонки: подпись / Meta Bind INPUT / Meta Bind BUTTON.
+   Ничего не заменяем HTML-муляжами: сохраняются оригинальные макросы. */
+.character-sheet .callout[data-callout="character-health"] > .callout-content,
+.character-sheet .callout[data-callout="character-defense"] > .callout-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+}
 .character-sheet .callout[data-callout="character-health"] > .callout-content > p,
-.character-sheet .callout[data-callout="character-defense"] > .callout-content > p,
+.character-sheet .callout[data-callout="character-defense"] > .callout-content > p {
+    display: grid;
+    align-items: center;
+    column-gap: 14px;
+    row-gap: 5px;
+    padding: 10px 4px;
+    min-width: 0;
+    border-bottom: 1px solid var(--background-modifier-border);
+    font-size: .89rem;
+}
+.character-sheet .callout[data-callout="character-health"] > .callout-content > p:last-child,
+.character-sheet .callout[data-callout="character-defense"] > .callout-content > p:last-child {
+    border-bottom: none;
+}
+.character-sheet .callout[data-callout="character-health"] > .callout-content > p {
+    grid-template-columns: minmax(160px, 28%) minmax(110px, 1fr) minmax(155px, 210px);
+}
+.character-sheet .callout[data-callout="character-defense"] > .callout-content > p {
+    grid-template-columns: minmax(180px, 29%) minmax(0, 1fr);
+}
+.character-sheet .callout[data-callout="character-health"] > .callout-content > p > .mb-input-wrapper,
+.character-sheet .callout[data-callout="character-defense"] > .callout-content > p > .mb-input-wrapper {
+    display: block;
+    grid-column: 2;
+    min-width: 0;
+    max-width: 100%;
+}
+.character-sheet .callout[data-callout="character-health"] > .callout-content > p > .mb-button,
+.character-sheet .callout[data-callout="character-health"] > .callout-content > p > .mb-button-group {
+    grid-column: 3;
+    justify-self: stretch;
+    width: 100%;
+    min-width: 0;
+}
+.character-sheet .callout[data-callout="character-health"] > .callout-content > p > .mb-button .mb-button-inner,
+.character-sheet .callout[data-callout="character-health"] > .callout-content > p > .mb-button-group {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+}
+.character-sheet .callout[data-callout="character-health"] > .callout-content > p > .mb-button {
+    margin: 0;
+}
+.character-sheet .callout[data-callout="character-health"] input[type="number"],
+.character-sheet .callout[data-callout="character-defense"] input[type="number"],
+.character-sheet .callout[data-callout="character-defense"] input[type="text"] {
+    box-sizing: border-box;
+    width: 100% !important;
+    max-width: 100%;
+    min-width: 0;
+}
+.character-sheet .callout[data-callout="character-defense"] .mb-input-wrapper {
+    min-width: 0;
+}
+.character-sheet .callout[data-callout="character-defense"] .mb-input-wrapper:has(input[type="checkbox"]) {
+    justify-self: start;
+}
+.character-sheet .callout[data-callout="character-health"] > .callout-content > p:has(.mb-button) {
+    background: color-mix(in srgb, var(--background-secondary) 45%, transparent);
+    border-radius: 6px;
+    padding-inline: 9px;
+}
+
+/* Кнопки короткого/длинного отдыха горизонтально снизу. */
 .character-sheet .callout[data-callout="character-rest"] > .callout-content > p {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 5px 8px;
+    justify-content: flex-start;
+    gap: 10px;
 }
-.character-sheet .callout[data-callout="character-dashboard"] .mb-input-wrapper {
+.character-sheet .callout[data-callout="character-rest"] .mb-button {
+    min-width: 180px;
+}
+
+/* Компактные поля в шапке, без изменения привязок. */
+.character-sheet .callout[data-callout="character-profile"] .mb-input-wrapper {
+    max-width: 100%;
+}
+.character-sheet .callout[data-callout="character-profile"] input[type="number"] {
+    width: 90px !important;
+}
+.character-sheet .callout[data-callout="character-profile"] input[type="text"],
+.character-sheet .callout[data-callout="character-profile"] select {
     min-width: 0;
     max-width: 100%;
 }
-.character-sheet .callout[data-callout="character-dashboard"] input[type="number"]:not([readonly]) {
-    width: 6rem;
-    max-width: 100%;
-}
-.character-sheet .callout[data-callout="character-dashboard"] input[type="text"] {
-    max-width: 100%;
-}
-.character-sheet .callout[data-callout="character-dashboard"] .mb-button button,
-.character-sheet .callout[data-callout="character-dashboard"] button.mb-button {
-    font-size: 0.8rem;
-    padding: 5px 9px;
-}
 
-/* Результат КД остаётся DataviewJS, но визуально встроен в защиту. */
-.character-sheet .callout[data-callout="character-defense"] .character-ac-result {
-    margin: 10px 0 3px !important;
-    padding: 8px 10px;
-    background: var(--background-secondary);
-    border-radius: 8px;
-}
-.character-sheet .callout[data-callout="character-defense"] .character-ac-result input[readonly] {
-    background: var(--background-primary-alt);
-    border: 1px solid var(--background-modifier-border);
-    color: var(--text-normal);
-}
-
-/* Восстановление ресурсов выводим отдельной горизонтальной панелью. */
-.character-sheet .callout[data-callout="character-rest"] > .callout-content > p {
-    gap: 8px;
-    margin: 0;
-}
-
-/* Адаптация по ширине именно листа Obsidian, а не всего окна. */
-@container character-dashboard (max-width: 620px) {
-    .callout[data-callout="character-dashboard"] > .callout-content {
-        grid-template-columns: minmax(0, 1fr);
-    }
-    .callout[data-callout="character-dashboard"] > .callout-content > .callout {
-        grid-column: 1 / -1;
-    }
+/* Адаптация к ширине самой панели Obsidian. */
+@container character-dashboard (max-width: 740px) {
     .callout[data-callout="character-profile"] > .callout-content {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+    .callout[data-callout="character-health"] > .callout-content > p {
+        grid-template-columns: minmax(125px, 32%) minmax(95px, 1fr) minmax(135px, 185px);
+        column-gap: 9px;
+    }
+    .callout[data-callout="character-defense"] > .callout-content > p {
+        grid-template-columns: minmax(125px, 35%) minmax(0, 1fr);
+        column-gap: 9px;
+    }
 }
-@container character-dashboard (max-width: 430px) {
+@container character-dashboard (max-width: 560px) {
+    .callout[data-callout="character-summary"] > .callout-content {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .callout[data-callout="character-health"] > .callout-content > p {
+        grid-template-columns: minmax(118px, 37%) minmax(0, 1fr);
+    }
+    .callout[data-callout="character-health"] > .callout-content > p > .mb-button,
+    .callout[data-callout="character-health"] > .callout-content > p > .mb-button-group {
+        grid-column: 2;
+        grid-row: auto;
+    }
+}
+@container character-dashboard (max-width: 400px) {
+    .callout[data-callout="character-dashboard"] > .callout-content > .callout {
+        padding: 11px;
+    }
     .callout[data-callout="character-profile"] > .callout-content {
         grid-template-columns: minmax(0, 1fr);
     }
-    .callout[data-callout="character-dashboard"] > .callout-content > .callout {
-        padding: 10px;
+    .callout[data-callout="character-health"] > .callout-content > p,
+    .callout[data-callout="character-defense"] > .callout-content > p {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 6px;
+    }
+    .callout[data-callout="character-health"] > .callout-content > p > .mb-input-wrapper,
+    .callout[data-callout="character-health"] > .callout-content > p > .mb-button,
+    .callout[data-callout="character-defense"] > .callout-content > p > .mb-input-wrapper {
+        grid-column: 1;
+    }
+    .callout[data-callout="character-rest"] .mb-button {
+        min-width: 0;
+        flex: 1 1 100%;
     }
 }
