@@ -28,10 +28,11 @@ const rollMode = isAttackRoll && shift !== alt
     : "normal";
 const baseFormula = String(context.args?.formula ?? "1d20");
 const hasAttackD20 = /\b1d20\b/i.test(baseFormula);
-const rawFormula = hasAttackD20 && rollMode !== "normal"
+let rawFormula = hasAttackD20 && rollMode !== "normal"
     ? baseFormula.replace(/\b1d20\b/i, rollMode === "advantage" ? "2d20kh1" : "2d20kl1")
     : baseFormula;
-const rollName = String(context.args?.name ?? "Бросок") +
+const baseRollName = String(context.args?.name ?? "Бросок");
+const rollName = baseRollName +
     (hasAttackD20 && rollMode === "advantage" ? " (с преимуществом)" :
      hasAttackD20 && rollMode === "disadvantage" ? " (с помехой)" : "");
 
@@ -52,6 +53,221 @@ const frontmatter =
     app.metadataCache
         .getFileCache(file)
         ?.frontmatter ?? {};
+
+// ================================
+// ДОПОЛНИТЕЛЬНЫЕ БОНУСЫ К ПРОВЕРКАМ
+// Ctrl + кнопка проверки / спасброска / инициативы: редактировать.
+// Обычный клик: бросить кубик с сохранёнными бонусами.
+// Хранятся в character_roll_bonuses внутри YAML данного персонажа.
+// Атаки и урон этот обработчик не затрагивает.
+// ================================
+
+const rollBonusKey = baseRollName.trim();
+const canConfigureBonuses = !isAttackRoll &&
+    /^(?:Проверка|Спасбросок)(?:\s|$)/u.test(rollBonusKey);
+const bonusConfig = frontmatter.character_roll_bonuses;
+const bonusMap = bonusConfig && typeof bonusConfig === "object" &&
+    !Array.isArray(bonusConfig) ? bonusConfig : {};
+
+function parseBonusAmount(value) {
+    const normalized = String(value ?? "").trim().replace(",", ".");
+    if (!/^[+-]?(?:\d+(?:\.\d+)?|\.\d+)$/.test(normalized)) return null;
+    const number = Number(normalized);
+    return Number.isFinite(number) && Math.abs(number) <= 100000 ? number : null;
+}
+
+function readableBonus(number) {
+    return (number >= 0 ? "+" : "") + String(number);
+}
+
+const storedRollBonuses = canConfigureBonuses && Array.isArray(bonusMap[rollBonusKey])
+    ? bonusMap[rollBonusKey] : [];
+
+if (canConfigureBonuses && context.click?.ctrlKey === true) {
+    const { Modal, Setting } = obsidian;
+
+    class RollBonusesModal extends Modal {
+        constructor() {
+            super(app);
+            this.entries = storedRollBonuses
+                .filter(item => item && typeof item === "object")
+                .map(item => ({
+                    source: String(item.source ?? item.name ?? ""),
+                    amount: String(item.value ?? item.bonus ?? ""),
+                    enabled: item.enabled !== false
+                }));
+        }
+
+        onOpen() {
+            this.titleEl.setText("Бонусы: " + rollBonusKey);
+            this.modalEl.style.width = "min(680px, 96vw)";
+            this.contentEl.createEl("p", {
+                text: "Добавляй источники бонусов, например «Бдительный» +5 к инициативе. " +
+                      "Они сохраняются только для этой проверки у этого персонажа. " +
+                      "Отключённые бонусы не влияют на броски."
+            });
+
+            const list = this.contentEl.createDiv({ cls: "character-roll-bonus-list" });
+            const summary = this.contentEl.createEl("p");
+            summary.style.fontWeight = "600";
+
+            const updateSummary = () => {
+                let total = 0;
+                for (const entry of this.entries) {
+                    if (!entry.enabled || (!entry.source.trim() && !entry.amount.trim())) continue;
+                    const value = parseBonusAmount(entry.amount);
+                    if (value === null) {
+                        summary.setText("Сумма: проверь значения бонусов");
+                        return;
+                    }
+                    total += value;
+                }
+                summary.setText("Сумма активных бонусов: " +
+                    readableBonus(Number(total.toFixed(6))));
+            };
+
+            const addEntry = entry => {
+                this.entries.push(entry);
+                const row = list.createDiv({ cls: "character-roll-bonus-entry" });
+                row.style.display = "flex";
+                row.style.flexWrap = "wrap";
+                row.style.alignItems = "center";
+                row.style.gap = "8px";
+                row.style.padding = "8px 0";
+                row.style.borderBottom = "1px solid var(--background-modifier-border)";
+
+                const source = row.createEl("input", {
+                    type: "text",
+                    attr: { placeholder: "Источник: Бдительный", "aria-label": "Источник бонуса" }
+                });
+                source.style.flex = "1 1 185px";
+                source.style.minWidth = "120px";
+                source.value = entry.source;
+                source.addEventListener("input", () => {
+                    entry.source = source.value;
+                    updateSummary();
+                });
+
+                const amount = row.createEl("input", {
+                    type: "text",
+                    attr: { placeholder: "+5", "aria-label": "Числовой бонус" }
+                });
+                amount.style.flex = "0 0 78px";
+                amount.style.width = "78px";
+                amount.value = entry.amount;
+                amount.addEventListener("input", () => {
+                    entry.amount = amount.value;
+                    updateSummary();
+                });
+
+                const active = row.createEl("label");
+                active.style.display = "inline-flex";
+                active.style.alignItems = "center";
+                active.style.gap = "5px";
+                const checkbox = active.createEl("input", { type: "checkbox" });
+                checkbox.checked = entry.enabled;
+                active.createSpan({ text: "Активен" });
+                checkbox.addEventListener("change", () => {
+                    entry.enabled = checkbox.checked;
+                    updateSummary();
+                });
+
+                const remove = row.createEl("button", { text: "✕" });
+                remove.setAttribute("aria-label", "Удалить бонус");
+                remove.title = "Удалить этот бонус";
+                remove.addEventListener("click", () => {
+                    this.entries = this.entries.filter(item => item !== entry);
+                    row.remove();
+                    updateSummary();
+                });
+                updateSummary();
+            };
+
+            const initial = this.entries.slice();
+            this.entries = [];
+            if (initial.length) initial.forEach(addEntry);
+            else addEntry({ source: "", amount: "", enabled: true });
+
+            new Setting(this.contentEl)
+                .addButton(button => button
+                    .setButtonText("+ Добавить источник")
+                    .onClick(() => addEntry({ source: "", amount: "", enabled: true })));
+
+            new Setting(this.contentEl)
+                .addButton(button => button
+                    .setButtonText("Сохранить")
+                    .setCta()
+                    .onClick(async () => {
+                        const saved = [];
+                        for (const entry of this.entries) {
+                            const name = entry.source.trim();
+                            const text = entry.amount.trim();
+                            if (!name && !text) continue;
+                            const value = parseBonusAmount(text);
+                            if (!name || name.length > 100 || value === null) {
+                                new Notice("Укажи название (до 100 символов) и числовой бонус, например +5 или -2.");
+                                return;
+                            }
+                            saved.push({ source: name, value, enabled: entry.enabled });
+                        }
+                        button.setDisabled(true);
+                        try {
+                            await app.fileManager.processFrontMatter(file, fm => {
+                                const current = fm.character_roll_bonuses;
+                                const updated = current && typeof current === "object" &&
+                                    !Array.isArray(current) ? { ...current } : {};
+                                if (saved.length) updated[rollBonusKey] = saved;
+                                else delete updated[rollBonusKey];
+                                if (Object.keys(updated).length) fm.character_roll_bonuses = updated;
+                                else delete fm.character_roll_bonuses;
+                            });
+                            this.close();
+                            new Notice("Бонусы к «" + rollBonusKey + "» сохранены.");
+                        } catch (error) {
+                            button.setDisabled(false);
+                            new Notice("Не удалось сохранить бонусы: " +
+                                String(error?.message ?? error));
+                        }
+                    }))
+                .addButton(button => button
+                    .setButtonText("Отмена")
+                    .onClick(() => this.close()));
+
+            updateSummary();
+        }
+
+        onClose() {
+            this.contentEl.empty();
+        }
+    }
+
+    new RollBonusesModal().open();
+    return; // Ctrl+клик только открывает окно, без броска и отправки в Discord.
+}
+
+const activeRollBonuses = canConfigureBonuses
+    ? storedRollBonuses
+        .map(item => ({
+            source: String(item?.source ?? item?.name ?? "").trim(),
+            value: parseBonusAmount(item?.value ?? item?.bonus),
+            enabled: item?.enabled !== false
+        }))
+        .filter(item => item.enabled && item.source && item.value !== null)
+    : [];
+
+const bonusTotal = Number(activeRollBonuses
+    .reduce((sum, item) => sum + item.value, 0).toFixed(6));
+
+if (bonusTotal > 0) rawFormula += " + " + bonusTotal;
+else if (bonusTotal < 0) rawFormula += " - " + Math.abs(bonusTotal);
+
+// Отдельно показываем источники; итоговое число уже содержит бонусы.
+const bonusDescription = activeRollBonuses.length
+    ? "\nДоп. бонусы: " + activeRollBonuses.map(item =>
+        item.source.replace(/[\r\n\x60*_@]/g, " ").slice(0, 100) +
+        " " + readableBonus(item.value)).join(" · ").slice(0, 700)
+    : "";
+
 // ================================
 // ВЫБОР КАНАЛА
 // ================================
@@ -301,7 +517,7 @@ const embed = {
 
     description:
         `**${rollName}**\n\n` +
-        `${details} = **${result}**`
+        `${details} = **${result}**${bonusDescription}`
 };
 
 
