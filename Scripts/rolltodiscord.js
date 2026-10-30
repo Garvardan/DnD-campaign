@@ -304,13 +304,6 @@ for (const item of activeRollBonuses) {
     rawFormula += (item.spec.sign === -1 ? " - " : " + ") + item.spec.term;
 }
 
-// Отдельно показываем источники; итоговое число уже содержит бонусы.
-const bonusDescription = activeRollBonuses.length
-    ? "\nДоп. бонусы: " + activeRollBonuses.map(item =>
-        item.source.replace(/[\r\n\x60*_@]/g, " ").slice(0, 100) +
-        " " + item.spec.display).join(" · ").slice(0, 700)
-    : "";
-
 // ================================
 // ВЫБОР КАНАЛА
 // ================================
@@ -560,7 +553,7 @@ const embed = {
 
     description:
         `**${rollName}**\n\n` +
-        `${details} = **${result}**${bonusDescription}`
+        `${details} = **${result}**`
 };
 
 
