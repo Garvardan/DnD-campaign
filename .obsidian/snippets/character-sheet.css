@@ -530,3 +530,16 @@
         width: 29px;
     }
 }
+
+
+/* Компактная кнопка обнуления текущих HP возле текущего/макс. значения. */
+.character-sheet .callout[data-callout="character-hitpoints"] .mb-button {
+    flex: 0 0 auto;
+    margin: 0 0 0 auto;
+    min-width: 0;
+}
+.character-sheet .callout[data-callout="character-hitpoints"] .mb-button-inner {
+    font-size: .75rem;
+    font-weight: 600;
+    padding: 5px 11px;
+}
