@@ -378,3 +378,155 @@
         width: 68px !important;
     }
 }
+
+
+/* Карточки характеристик и навыков: общий стиль блока HP/КД.
+   Все INPUT / VIEW / BUTTON остаются элементами Meta Bind. */
+.character-sheet .callout[data-callout="character-attributes"] {
+    --callout-color: 121, 141, 210;
+    --callout-icon: lucide-dices;
+    background: var(--background-secondary);
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 14px;
+    padding: 14px;
+    margin: 1.2em 0;
+    container-type: inline-size;
+    container-name: character-attributes;
+}
+.character-sheet .callout[data-callout="character-attributes"] > .callout-title {
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 2px 4px 12px;
+}
+.character-sheet .callout[data-callout="character-attributes"] > .callout-content {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 12px;
+    min-width: 0;
+}
+.character-sheet .callout[data-callout="character-attributes"] > .callout-content > .callout[data-callout="character-attribute"] {
+    --callout-color: 112, 177, 194;
+    --callout-icon: lucide-dumbbell;
+    min-width: 0;
+    margin: 0;
+    padding: 13px 15px;
+    border: 1px solid var(--background-modifier-border);
+    background: var(--background-primary);
+    border-radius: 10px;
+    box-shadow: none;
+}
+.character-sheet .callout[data-callout="character-attribute"] > .callout-title {
+    padding: 0 0 10px;
+    font-size: .91rem;
+    font-weight: 700;
+}
+.character-sheet .callout[data-callout="character-attribute"] > .callout-content {
+    min-width: 0;
+}
+.character-sheet .callout[data-callout="character-attribute"] > .callout-content > p {
+    min-width: 0;
+    margin: 0;
+    padding: 9px 0;
+    line-height: 1.45;
+    border-bottom: 1px solid var(--background-modifier-border);
+    font-size: .84rem;
+}
+.character-sheet .callout[data-callout="character-attribute"] > .callout-content > p:last-child {
+    border-bottom: 0;
+}
+.character-sheet .callout[data-callout="character-attribute"] > .callout-content > p:first-child {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px 12px;
+    align-items: center;
+    padding-top: 0;
+    font-variant-numeric: tabular-nums;
+}
+.character-sheet .callout[data-callout="character-attribute"] > .callout-content > p:first-child strong {
+    color: var(--text-muted);
+    font-size: .82rem;
+}
+.character-sheet .callout[data-callout="character-attribute"] > .callout-content > p:first-child input[type="number"] {
+    width: 68px !important;
+    height: 35px;
+    text-align: center;
+    font-weight: 650;
+    font-size: 1.06rem;
+}
+.character-sheet .callout[data-callout="character-attribute"] > .callout-content > p:first-child .mb-view-wrapper,
+.character-sheet .callout[data-callout="character-attribute"] > .callout-content > p:first-child .mb-view {
+    font-size: 1.08rem;
+    font-weight: 700;
+}
+/* Спасброски: все кнопки и переключатель на горизонтальной строке. */
+.character-sheet .callout[data-callout="character-attribute"] > .callout-content > p:has(.mb-button):not(:has(.mb-view-wrapper)) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 9px;
+    row-gap: 7px;
+    padding: 9px 0;
+}
+.character-sheet .callout[data-callout="character-attribute"] > .callout-content > p:has(.mb-button):not(:has(.mb-view-wrapper)) strong {
+    color: var(--text-muted);
+    font-weight: 600;
+}
+/* Строка навыка: кнопка / владение / компетенция / доп. бонус БМ.
+   Текстовые подписи участвуют в grid как анонимные элементы. */
+.character-sheet .callout[data-callout="character-attribute"] > .callout-content > p:has(.mb-button):has(.mb-view-wrapper) {
+    display: grid;
+    grid-template-columns: minmax(85px, 1fr) max-content 32px max-content 32px max-content minmax(36px, auto);
+    align-items: center;
+    gap: 5px 6px;
+    padding: 8px 0;
+    min-width: 0;
+    font-size: .8rem;
+    white-space: nowrap;
+}
+.character-sheet .callout[data-callout="character-attribute"] > .callout-content > p:has(.mb-button):has(.mb-view-wrapper) .mb-button {
+    min-width: 0;
+    max-width: 100%;
+    margin: 0;
+}
+.character-sheet .callout[data-callout="character-attribute"] > .callout-content > p:has(.mb-button):has(.mb-view-wrapper) .mb-button-inner {
+    width: 100%;
+    justify-content: center;
+    padding-inline: 5px;
+    font-size: .78rem;
+}
+.character-sheet .callout[data-callout="character-attribute"] > .callout-content > p:has(.mb-button):has(.mb-view-wrapper) .mb-input-wrapper {
+    width: 32px;
+    min-width: 0;
+    justify-self: center;
+}
+.character-sheet .callout[data-callout="character-attribute"] > .callout-content > p:has(.mb-button):has(.mb-view-wrapper) .mb-view-wrapper {
+    min-width: 30px;
+    justify-self: center;
+    text-align: center;
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+}
+.character-sheet .callout[data-callout="character-attribute"] > .callout-content > p:has(> strong:first-child):not(:first-child) {
+    font-size: .74rem;
+    color: var(--text-muted);
+    padding: 9px 0 4px;
+}
+@container character-attributes (max-width: 760px) {
+    .callout[data-callout="character-attributes"] > .callout-content {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+@container character-attributes (max-width: 440px) {
+    .callout[data-callout="character-attributes"] > .callout-content > .callout {
+        padding: 10px 9px;
+    }
+    .callout[data-callout="character-attribute"] > .callout-content > p:has(.mb-button):has(.mb-view-wrapper) {
+        grid-template-columns: minmax(75px, 1fr) max-content 29px max-content 29px max-content 36px;
+        column-gap: 4px;
+        font-size: .75rem;
+    }
+    .callout[data-callout="character-attribute"] > .callout-content > p:has(.mb-button):has(.mb-view-wrapper) .mb-input-wrapper {
+        width: 29px;
+    }
+}
