@@ -80,6 +80,38 @@ function readableBonus(number) {
     return (number >= 0 ? "+" : "") + String(number);
 }
 
+// Можно писать обычные числа (+5, -2), кубики (1d4, -2d6)
+// либо числовое свойство персонажа (prof, halfprof, -wis_mod).
+// Это не JavaScript: произвольный код не выполняется.
+function parseBonusSpec(value) {
+    const number = parseBonusAmount(value);
+    if (number !== null) return {
+        kind: "number", value: number, display: readableBonus(number)
+    };
+    const str = String(value ?? "").trim();
+    const dice = /^([+-]?)(\d{0,2})d(\d{1,3})$/i.exec(str);
+    if (dice) {
+        const count = dice[2] ? Number(dice[2]) : 1;
+        const sides = Number(dice[3]);
+        if (count < 1 || count > 99 || sides < 2 || sides > 999) return null;
+        return {
+            kind: "dice",
+            sign: dice[1] === "-" ? -1 : 1,
+            term: count + "d" + sides,
+            display: (dice[1] === "-" ? "-" : "+") + count + "d" + sides
+        };
+    }
+    const prop = /^([+-]?)([a-z_][a-z0-9_]*)$/i.exec(str);
+    if (prop) return {
+        kind: "property",
+        sign: prop[1] === "-" ? -1 : 1,
+        term: "[" + prop[2] + "]",
+        key: prop[2],
+        display: (prop[1] === "-" ? "-" : "+") + prop[2]
+    };
+    return null;
+}
+
 const storedRollBonuses = canConfigureBonuses && Array.isArray(bonusMap[rollBonusKey])
     ? bonusMap[rollBonusKey] : [];
 
@@ -102,7 +134,7 @@ if (canConfigureBonuses && context.click?.ctrlKey === true) {
             this.titleEl.setText("Бонусы: " + rollBonusKey);
             this.modalEl.style.width = "min(680px, 96vw)";
             this.contentEl.createEl("p", {
-                text: "Добавляй источники бонусов, например «Бдительный» +5 к инициативе. " +
+                text: "Добавляй источники бонусов, например «Бдительный» +5 к инициативе или 1d4 от заклинания. " +
                       "Они сохраняются только для этой проверки у этого персонажа. " +
                       "Отключённые бонусы не влияют на броски."
             });
@@ -113,17 +145,20 @@ if (canConfigureBonuses && context.click?.ctrlKey === true) {
 
             const updateSummary = () => {
                 let total = 0;
+                let extra = 0;
                 for (const entry of this.entries) {
                     if (!entry.enabled || (!entry.source.trim() && !entry.amount.trim())) continue;
-                    const value = parseBonusAmount(entry.amount);
-                    if (value === null) {
+                    const spec = parseBonusSpec(entry.amount);
+                    if (!spec) {
                         summary.setText("Сумма: проверь значения бонусов");
                         return;
                     }
-                    total += value;
+                    if (spec.kind === "number") total += spec.value;
+                    else extra++;
                 }
-                summary.setText("Сумма активных бонусов: " +
-                    readableBonus(Number(total.toFixed(6))));
+                summary.setText("Постоянные бонусы: " +
+                    readableBonus(Number(total.toFixed(6))) +
+                    (extra ? " · кубики/переменные: " + extra : ""));
             };
 
             const addEntry = entry => {
@@ -140,6 +175,7 @@ if (canConfigureBonuses && context.click?.ctrlKey === true) {
                     type: "text",
                     attr: { placeholder: "Источник: Бдительный", "aria-label": "Источник бонуса" }
                 });
+                source.type = "text";
                 source.style.flex = "1 1 185px";
                 source.style.minWidth = "120px";
                 source.value = entry.source;
@@ -150,10 +186,11 @@ if (canConfigureBonuses && context.click?.ctrlKey === true) {
 
                 const amount = row.createEl("input", {
                     type: "text",
-                    attr: { placeholder: "+5", "aria-label": "Числовой бонус" }
+                    attr: { placeholder: "+5 / 1d4 / prof", "aria-label": "Бонус или кубик" }
                 });
-                amount.style.flex = "0 0 78px";
-                amount.style.width = "78px";
+                amount.type = "text";
+                amount.style.flex = "0 0 118px";
+                amount.style.width = "118px";
                 amount.value = entry.amount;
                 amount.addEventListener("input", () => {
                     entry.amount = amount.value;
@@ -164,7 +201,8 @@ if (canConfigureBonuses && context.click?.ctrlKey === true) {
                 active.style.display = "inline-flex";
                 active.style.alignItems = "center";
                 active.style.gap = "5px";
-                const checkbox = active.createEl("input", { type: "checkbox" });
+                const checkbox = active.createEl("input", { attr: { type: "checkbox" } });
+                checkbox.type = "checkbox";
                 checkbox.checked = entry.enabled;
                 active.createSpan({ text: "Активен" });
                 checkbox.addEventListener("change", () => {
@@ -203,12 +241,12 @@ if (canConfigureBonuses && context.click?.ctrlKey === true) {
                             const name = entry.source.trim();
                             const text = entry.amount.trim();
                             if (!name && !text) continue;
-                            const value = parseBonusAmount(text);
-                            if (!name || name.length > 100 || value === null) {
-                                new Notice("Укажи название (до 100 символов) и числовой бонус, например +5 или -2.");
+                            const spec = parseBonusSpec(text);
+                            if (!name || name.length > 100 || !spec) {
+                                new Notice("Укажи название (до 100 символов) и бонус: +5, -2, 1d4 или prof.");
                                 return;
                             }
-                            saved.push({ source: name, value, enabled: entry.enabled });
+                            saved.push({ source: name, value: spec.kind === "number" ? spec.value : spec.display, enabled: entry.enabled });
                         }
                         button.setDisabled(true);
                         try {
@@ -249,23 +287,28 @@ const activeRollBonuses = canConfigureBonuses
     ? storedRollBonuses
         .map(item => ({
             source: String(item?.source ?? item?.name ?? "").trim(),
-            value: parseBonusAmount(item?.value ?? item?.bonus),
+            spec: parseBonusSpec(item?.value ?? item?.bonus),
             enabled: item?.enabled !== false
         }))
-        .filter(item => item.enabled && item.source && item.value !== null)
+        .filter(item => item.enabled && item.source && item.spec !== null)
     : [];
 
 const bonusTotal = Number(activeRollBonuses
-    .reduce((sum, item) => sum + item.value, 0).toFixed(6));
+    .filter(item => item.spec.kind === "number")
+    .reduce((sum, item) => sum + item.spec.value, 0).toFixed(6));
 
 if (bonusTotal > 0) rawFormula += " + " + bonusTotal;
 else if (bonusTotal < 0) rawFormula += " - " + Math.abs(bonusTotal);
+for (const item of activeRollBonuses) {
+    if (item.spec.kind === "number") continue;
+    rawFormula += (item.spec.sign === -1 ? " - " : " + ") + item.spec.term;
+}
 
 // Отдельно показываем источники; итоговое число уже содержит бонусы.
 const bonusDescription = activeRollBonuses.length
     ? "\nДоп. бонусы: " + activeRollBonuses.map(item =>
         item.source.replace(/[\r\n\x60*_@]/g, " ").slice(0, 100) +
-        " " + readableBonus(item.value)).join(" · ").slice(0, 700)
+        " " + item.spec.display).join(" · ").slice(0, 700)
     : "";
 
 // ================================
