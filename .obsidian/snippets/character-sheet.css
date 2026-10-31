@@ -541,3 +541,111 @@
 .character-sheet .callout[data-callout="character-hitpoints"] .mb-input-wrapper input[type="number"] {
     max-width: 95px;
 }
+
+
+/* АТАКИ ОРУЖИЕМ — карточки в стиле панели HP/КД и характеристик. */
+.character-sheet .callout[data-callout="character-attacks"] {
+    --callout-color: 194, 134, 94;
+    --callout-icon: lucide-swords;
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+.character-sheet .callout[data-callout="character-attacks"] > .callout-title {
+    padding: 3px 1px 12px;
+}
+.character-sheet .callout[data-callout="character-attacks"] > .callout-content {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    min-width: 0;
+}
+.character-sheet .callout[data-callout="character-attacks"] > .callout-content > .callout {
+    min-width: 0;
+    margin: 0;
+}
+.character-sheet .callout[data-callout="character-attack"] {
+    --callout-color: 194, 134, 94;
+    --callout-icon: lucide-swords;
+    background: var(--background-primary);
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 12px;
+    padding: 15px 17px;
+    box-shadow: none;
+}
+.character-sheet .callout[data-callout="character-attack"] > .callout-title {
+    padding: 0 0 10px;
+    font-size: 1rem;
+    font-weight: 700;
+    border-bottom: 1px solid var(--background-modifier-border);
+}
+.character-sheet .callout[data-callout="character-attack"] > .callout-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+}
+.character-sheet .callout[data-callout="character-attack"] > .callout-content > p {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px 10px;
+    min-width: 0;
+    margin: 0;
+    font-size: .88rem;
+}
+.character-sheet .callout[data-callout="character-attack"] > .callout-content > p > strong {
+    flex: 0 0 145px;
+    font-size: .69rem;
+    letter-spacing: .045em;
+    color: var(--text-muted);
+}
+.character-sheet .callout[data-callout="character-attack"] > .callout-content > p:has(.mb-view-wrapper) {
+    background: var(--background-secondary);
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 8px;
+    padding: 8px 10px;
+}
+.character-sheet .callout[data-callout="character-attack"] > .callout-content > p:has(.mb-view-wrapper) .mb-view-wrapper {
+    font-size: 1.35rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-normal);
+}
+.character-sheet .callout[data-callout="character-attack"] > .callout-content > p code {
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    padding: 3px 6px;
+    border-radius: 5px;
+    font-size: .85rem;
+}
+.character-sheet .callout[data-callout="character-attack"] > .callout-content > p:has(.mb-button) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    padding-top: 9px;
+    margin-top: 2px;
+    border-top: 1px solid var(--background-modifier-border);
+}
+.character-sheet .callout[data-callout="character-attack"] .mb-button,
+.character-sheet .callout[data-callout="character-attack"] .mb-button-group {
+    flex: 1 1 84px;
+    min-width: 0;
+}
+.character-sheet .callout[data-callout="character-attack"] .mb-button-inner {
+    width: 100%;
+    justify-content: center;
+    font-size: .79rem;
+    padding: 7px 10px;
+}
+/* Крит заметен, но не перебивает обычную атаку. */
+.character-sheet .callout[data-callout="character-attack"] .mb-button:last-child .mb-button-inner {
+    border-color: var(--color-red);
+}
+@media (max-width: 950px) {
+    .character-sheet .callout[data-callout="character-attacks"] > .callout-content {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
