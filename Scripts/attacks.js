@@ -101,8 +101,14 @@ function render(attacks) {
             "```"
         ].join("\n");
     });
+    // Сначала все карточки внутри одного контейнера, затем скрытые определения
+    // кнопок Meta Bind — вне контейнера, чтобы не разрывать вложенные callout.
+    const delimiter = "\n\n" + "```meta-bind-button";
+    const cards = blocks.map(block => block.slice(0, block.indexOf(delimiter)));
+    const definitions = blocks.map(block => block.slice(block.indexOf(delimiter) + 2));
     return START + "\n> [!character-attacks] СПИСОК АТАК\n>\n" +
-        blocks.join("\n>\n") + "\n" + END;
+        cards.join("\n>\n") + "\n\n" +
+        definitions.join("\n\n") + "\n" + END;
 }
 async function save(change) {
     let updated;
