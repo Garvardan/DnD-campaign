@@ -21,6 +21,7 @@ const WEBHOOK_PRIVATE =
 // Только кнопки броска атаки помечаются attackRoll: true.
 // Shift — преимущество, Alt — помеха; вместе взаимно отменяются.
 const isAttackRoll = context.args?.attackRoll === true;
+const isCriticalDamage = context.args?.criticalDamage === true;
 const shift = context.click?.shiftKey === true;
 const alt = context.click?.altKey === true;
 const rollMode = isAttackRoll && shift !== alt
@@ -345,7 +346,7 @@ const normalizedFormula = String(rawFormula).replace(
     (_, count, sides) => "[" + count + "]d[" + sides + "]"
 );
 
-const formula =
+const expandedFormula =
     normalizedFormula.replace(
         /\[([A-Za-z_][A-Za-z0-9_]*)\]/g,
         (_, property) => {
@@ -366,6 +367,15 @@ const formula =
             return String(value);
         }
     );
+
+// Критический урон D&D 5e (2014): удваиваются ТОЛЬКО кости урона,
+// постоянные модификаторы сохраняются без изменений.
+// Выполняем замену после подстановки переменных: [halfprof]d[str_mod]
+// сначала станет, например, 1d5, а при крите — 2d5.
+const formula = isCriticalDamage
+    ? expandedFormula.replace(/\b(\d*)d(\d+)\b/gi, (_, count, sides) =>
+        String(2 * (count ? Number(count) : 1)) + "d" + sides)
+    : expandedFormula;
 
 
 // ================================
