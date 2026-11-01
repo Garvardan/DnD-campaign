@@ -1,6 +1,6 @@
 {
   "collapse-filter": false,
-  "search": "-path:Заклинания  ",
+  "search": "-path:Заклинания  file:",
   "showTags": false,
   "showAttachments": false,
   "hideUnresolved": false,
@@ -18,5 +18,5 @@
   "linkStrength": 0.531707317073171,
   "linkDistance": 229,
   "scale": 0.45050804799449573,
-  "close": true
+  "close": false
 }
