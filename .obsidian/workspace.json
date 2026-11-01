@@ -12,10 +12,14 @@
             "id": "8594a88ba72ac92d",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Граф"
+              "type": "markdown",
+              "state": {
+                "file": "Буря зенита.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Буря зенита"
             }
           }
         ]
@@ -210,7 +214,9 @@
             "type": "leaf",
             "state": {
               "type": "footnotes",
-              "state": {},
+              "state": {
+                "file": "Буря зенита.md"
+              },
               "icon": "lucide-file-signature",
               "title": "Сноски"
             }
@@ -237,6 +243,8 @@
   },
   "active": "8594a88ba72ac92d",
   "lastOpenFiles": [
+    "Лонгины.md",
+    "Буря зенита.md",
     "Лавиния Рени.md",
     "Предметы/Каталог.md",
     "Предметы/Абсолютная погибель.md",
@@ -266,9 +274,7 @@
     "Scripts/abilities.js",
     "Scripts/equipment.js",
     "Scripts/character-description.js",
-    "Заклинания/1 круг/К чаю.md",
     "Scripts/custom-spell.js",
-    "conflict-files-obsidian-git.md",
     "Без названия.base",
     "Scripts/attacks.js",
     "Scripts/feats.js",
