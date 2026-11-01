@@ -12,10 +12,14 @@
             "id": "8594a88ba72ac92d",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Граф"
+              "type": "markdown",
+              "state": {
+                "file": "Предметы/Абсолютная погибель.md",
+                "mode": "preview",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Абсолютная погибель"
             }
           }
         ]
@@ -203,6 +207,18 @@
               "state": {},
               "icon": "dices",
               "title": "Dice Tray"
+            }
+          },
+          {
+            "id": "7edb900524844e5d",
+            "type": "leaf",
+            "state": {
+              "type": "footnotes",
+              "state": {
+                "file": "Предметы/Абсолютная погибель.md"
+              },
+              "icon": "lucide-file-signature",
+              "title": "Сноски"
             }
           }
         ],
