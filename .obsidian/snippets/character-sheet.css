@@ -649,10 +649,3 @@
         grid-template-columns: minmax(0, 1fr);
     }
 }
-
-/* Скрыть только длинные свойства со списками заклинаний в листах персонажей.
-   Они остаются в YAML и используются DataviewJS и Meta Bind. */
-.character-sheet .metadata-property[data-property-key="character_spells"],
-.character-sheet .metadata-property[data-property-key="character_spell_extra"] {
-    display: none !important;
-}
