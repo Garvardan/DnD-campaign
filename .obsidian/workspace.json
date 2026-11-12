@@ -12,10 +12,10 @@
             "id": "8594a88ba72ac92d",
             "type": "leaf",
             "state": {
-              "type": "empty",
+              "type": "graph",
               "state": {},
-              "icon": "lucide-file",
-              "title": "Новая вкладка"
+              "icon": "lucide-git-fork",
+              "title": "Граф"
             }
           }
         ]
@@ -237,10 +237,15 @@
       "workspaces:Пространства": false
     }
   },
-  "active": "62a65f7899e1c1a2",
+  "active": "8594a88ba72ac92d",
   "lastOpenFiles": [
-    "Персонажи/Мэрлин Амброзиус.md",
+    "Regilik Characters/Новый персонаж -- 69c60cfc-55a.md",
+    "Regilik Characters/Цао Цао -- f01022f7-dc0.md",
+    "Regilik Characters/Portraits/f01022f7-dc0a-49a9-b2fb-c82d8672c24d.jpg",
     "Персонажи/Риас.md",
+    "Regilik Characters/Portraits",
+    "Regilik Characters",
+    "Персонажи/Мэрлин Амброзиус.md",
     "Персонажи/Зеновия Кварта.md",
     "Предметы/Истинный Лонгин.md",
     "Портреты/Цао Цао.jpg",
@@ -264,8 +269,6 @@
     "Заклинания/4 круг/Водяная сфера.md",
     "Заклинания/4 круг/Град.md",
     "Заклинания/3 круг/Метель.md",
-    "Заклинания/1 круг/Ледяной кинжал.md",
-    "Заклинания/Заговоры/Обморожение.md",
     "Scripts/reset-hp.js",
     "Scripts/level-hp.js",
     "Scripts/abilities.js",
@@ -273,8 +276,6 @@
     "Scripts/character-description.js",
     "Scripts/custom-spell.js",
     "Без названия.base",
-    "Scripts/attacks.js",
-    "Scripts/feats.js",
     "Портреты/Зеновия.jpg",
     "Портреты/Риас.jpg",
     "Pasted image 20260928120357.png",
@@ -283,7 +284,6 @@
     "Персонажи/Портреты/Зеновия.jpg",
     "Структура жизни.canvas",
     "Pasted image 20260922144007.png",
-    "Pasted image 20260920021028.png",
-    "Pasted image 20260920020719.png"
+    "Pasted image 20260920021028.png"
   ]
 }
