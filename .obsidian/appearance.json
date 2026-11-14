@@ -1,5 +1,6 @@
 {
   "enabledCssSnippets": [
     "character-sheet"
-  ]
+  ],
+  "showRibbon": true
 }
